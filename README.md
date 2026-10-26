@@ -7,12 +7,12 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/AnARCHIS12/Nodalibre/releases/tag/v1.3.1"><img alt="Release v1.3.1" src="https://img.shields.io/badge/Release-v1.3.1-e6122a?style=for-the-badge&logo=github&logoColor=white"></a>
+  <a href="https://github.com/AnARCHIS12/Libre-claude/releases/tag/v1.4.0"><img alt="Release v1.4.0" src="https://img.shields.io/badge/Release-v1.4.0-e6122a?style=for-the-badge&logo=github&logoColor=white"></a>
   <img alt="PHP" src="https://img.shields.io/badge/PHP-8.3%2B-777BB4?style=for-the-badge&logo=php&logoColor=white">
   <img alt="SQLite" src="https://img.shields.io/badge/SQLite-local-003B57?style=for-the-badge&logo=sqlite&logoColor=white">
   <img alt="Mistral AI" src="https://img.shields.io/badge/Mistral AI-e6122a?style=for-the-badge">
-  <img alt="Docker" src="https://img.shields.io/docker/v/liberchat/nodalibre?sort=semver&style=for-the-badge&logo=docker&label=Docker">
-  <img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/liberchat/nodalibre?style=for-the-badge&logo=docker&logoColor=white">
+  <img alt="Docker" src="https://img.shields.io/docker/v/liberchat/libre-claude?sort=semver&style=for-the-badge&logo=docker&label=Docker">
+  <img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/liberchat/libre-claude?style=for-the-badge&logo=docker&logoColor=white">
   <img alt="Langues" src="https://img.shields.io/badge/FR%20EN%20ES%20DE%20IT-multilingue-e6122a?style=for-the-badge">
   <img alt="Licence MIT" src="https://img.shields.io/badge/Licence-MIT-e6122a?style=for-the-badge">
 </p>
@@ -25,6 +25,9 @@
 > Le projet change de nom et d'identité visuelle à partir de cette version.
 > Les installations existantes sont migrées automatiquement ; consultez la
 > section « Migration du nom » avant de mettre à jour un déploiement Docker.
+> L'image Docker conserve provisoirement son nom historique
+> `liberchat/libre-claude` afin que les installations existantes reçoivent la
+> mise à jour sans changer leur fichier Compose.
 
 ---
 
@@ -144,7 +147,7 @@ Nodalibre peut aussi tourner dans une image Docker Apache + PHP.
 Installation moderne depuis GitHub avec `curl` :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | sh
 ```
 
 Le script lance un assistant interactif :
@@ -152,7 +155,7 @@ Le script lance un assistant interactif :
 ```text
 Dossier d'installation [/home/user/nodalibre]:
 Port web local [8173]:
-Image Docker [liberchat/nodalibre:latest]:
+Image Docker [liberchat/libre-claude:latest]:
 Configurer GitHub OAuth maintenant ? [o/N]
 Lancer Nodalibre après l'installation ? [O/n]
 Continuer ? [O/n]
@@ -167,31 +170,31 @@ Si Docker est absent, l'installateur propose de l'installer automatiquement :
 Version avec URL GitHub classique :
 
 ```bash
-curl -fsSL https://github.com/AnARCHIS12/Nodalibre/raw/main/scripts/install.sh | sh
+curl -fsSL https://github.com/AnARCHIS12/Libre-claude/raw/main/scripts/install.sh | sh
 ```
 
 Afficher l'aide :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh -s -- --help
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | sh -s -- --help
 ```
 
 Changer le port sans passer par les questions :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh -s -- --port 8080
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | sh -s -- --port 8080
 ```
 
 Installer dans un dossier précis :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh -s -- --dir /opt/nodalibre
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | sh -s -- --dir /opt/nodalibre
 ```
 
 Installation automatique sans interaction :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | \
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | \
   NODALIBRE_YES=1 \
   NODALIBRE_PORT=8080 \
   sh
@@ -200,19 +203,19 @@ curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/i
 Préparer les fichiers sans démarrer Docker :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh -s -- --no-start
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | sh -s -- --no-start
 ```
 
 Refuser l'installation automatique de Docker :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh -s -- --no-install-docker
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | sh -s -- --no-install-docker
 ```
 
 Avec OAuth GitHub dès l'installation :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | \
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | \
   NODALIBRE_YES=1 \
   GITHUB_OAUTH_CLIENT_ID=votre_client_id \
   GITHUB_OAUTH_CLIENT_SECRET=votre_client_secret \
@@ -225,7 +228,7 @@ curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/i
 Depuis PowerShell, lancez l'installateur interactif Windows :
 
 ```powershell
-irm https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.ps1 | iex
 ```
 
 Le script demande :
@@ -233,7 +236,7 @@ Le script demande :
 ```text
 Dossier d'installation [~\nodalibre]
 Port web local [8173]
-Image Docker [liberchat/nodalibre:latest]
+Image Docker [liberchat/libre-claude:latest]
 Configurer GitHub OAuth maintenant ? [o/N]
 Lancer Nodalibre après l'installation ? [O/n]
 Continuer ? [O/n]
@@ -244,7 +247,7 @@ Si Docker Desktop ou WSL sont absents, le script configure automatiquement WSL 2
 Avec options, téléchargez puis lancez le script :
 
 ```powershell
-irm https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.ps1 -OutFile install.ps1
+irm https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.ps1 -OutFile install.ps1
 powershell -ExecutionPolicy Bypass -File .\install.ps1 -Port 8080 -Dir "$env:USERPROFILE\Nodalibre"
 ```
 
@@ -285,7 +288,7 @@ Le script crée :
 Puis il lance directement l'image :
 
 ```text
-liberchat/nodalibre:latest
+liberchat/libre-claude:latest
 ```
 
 ### Lancement rapide avec Docker Compose
@@ -378,8 +381,8 @@ docker buildx imagetools inspect votre-compte/nodalibre:latest
 Versionner une release :
 
 ```bash
-docker tag votre-compte/nodalibre:latest votre-compte/nodalibre:v1.3.1
-docker push votre-compte/nodalibre:v1.3.1
+docker tag votre-compte/nodalibre:latest votre-compte/nodalibre:v1.4.0
+docker push votre-compte/nodalibre:v1.4.0
 ```
 
 ### Déploiement production avec l'image publiée
@@ -387,7 +390,7 @@ docker push votre-compte/nodalibre:v1.3.1
 Le fichier `docker-compose.prod.yml` utilise directement l'image Docker Hub :
 
 ```yaml
-image: liberchat/nodalibre:latest
+image: liberchat/libre-claude:latest
 ```
 
 Lancer en production :
@@ -624,9 +627,13 @@ base SQLite et son journal. Sauvegardez néanmoins le dossier `data/` avant la
 mise à jour. Les anciens jetons API internes continuent de fonctionner ; les
 nouveaux jetons utilisent le préfixe `nd_sk_`.
 
-Les identifiants Docker ont changé pour `nodalibre`, `nodalibre_data` et
-`nodalibre_sandbox`. Si vous utilisiez des volumes nommés, rattachez explicitement
-les volumes existants ou copiez leur contenu avant de recréer le conteneur.
+Le nom de l'image Docker ne change pas dans cette version de transition :
+conservez `liberchat/libre-claude`. Un ancien fichier Compose peut donc être mis
+à jour avec `docker compose pull && docker compose up -d` sans perdre ses
+volumes. Le nouveau fichier Compose utilise les noms `nodalibre_data` et
+`nodalibre_sandbox` pour les installations neuves ; ne remplacez pas le fichier
+Compose d'une instance existante sans rattacher explicitement ses anciens
+volumes.
 
 ## Remerciements
 

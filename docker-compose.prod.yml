@@ -1,6 +1,7 @@
 services:
   nodalibre:
-    image: liberchat/nodalibre:latest
+    # Nom historique conservé pendant la transition vers Nodalibre.
+    image: liberchat/libre-claude:latest
     container_name: nodalibre
     ports:
       - "8173:80"

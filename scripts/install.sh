@@ -3,7 +3,7 @@ set -eu
 
 APP_NAME="Nodalibre"
 DEFAULT_DIR="${HOME:-.}/nodalibre"
-DEFAULT_IMAGE="liberchat/nodalibre:latest"
+DEFAULT_IMAGE="liberchat/libre-claude:latest"
 DEFAULT_PORT="8173"
 
 INSTALL_DIR="${NODALIBRE_DIR:-$DEFAULT_DIR}"
@@ -39,7 +39,7 @@ usage() {
 Nodalibre - installateur interactif
 
 Usage:
-  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh
+  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | sh
 
 Options:
   --yes             utilise les valeurs par défaut / variables d'environnement
@@ -56,7 +56,7 @@ Options:
 Variables d'environnement:
   NODALIBRE_DIR=/opt/nodalibre
   NODALIBRE_PORT=8173
-  NODALIBRE_IMAGE=liberchat/nodalibre:latest
+  NODALIBRE_IMAGE=liberchat/libre-claude:latest
   PUBLIC_URL=https://nodalibre.example.com
   GITHUB_OAUTH_CLIENT_ID=...
   GITHUB_OAUTH_CLIENT_SECRET=...
@@ -65,9 +65,9 @@ Variables d'environnement:
   NODALIBRE_INSTALL_DOCKER=1
 
 Exemples:
-  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh
-  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | NODALIBRE_YES=1 sh
-  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh -s -- --port 8080
+  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | sh
+  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | NODALIBRE_YES=1 sh
+  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | sh -s -- --port 8080
 EOF
 }
 

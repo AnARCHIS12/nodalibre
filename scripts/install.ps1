@@ -1,7 +1,7 @@
 param(
     [string]$Dir = $(if ($env:NODALIBRE_DIR) { $env:NODALIBRE_DIR } else { Join-Path $HOME "nodalibre" }),
     [int]$Port = $(if ($env:NODALIBRE_PORT) { [int]$env:NODALIBRE_PORT } else { 8173 }),
-    [string]$Image = $(if ($env:NODALIBRE_IMAGE) { $env:NODALIBRE_IMAGE } else { "liberchat/nodalibre:latest" }),
+    [string]$Image = $(if ($env:NODALIBRE_IMAGE) { $env:NODALIBRE_IMAGE } else { "liberchat/libre-claude:latest" }),
     [string]$PublicUrl = $(if ($env:PUBLIC_URL) { $env:PUBLIC_URL } else { "" }),
     [string]$GitHubOAuthClientId = $(if ($env:GITHUB_OAUTH_CLIENT_ID) { $env:GITHUB_OAUTH_CLIENT_ID } else { "" }),
     [string]$GitHubOAuthClientSecret = $(if ($env:GITHUB_OAUTH_CLIENT_SECRET) { $env:GITHUB_OAUTH_CLIENT_SECRET } else { "" }),
@@ -515,7 +515,7 @@ services:
             Write-Host "  2. Si Docker Desktop affiche une fenetre, acceptez le contrat de licence (bouton Accept)."
             Write-Host "  3. Si WSL ou Docker Desktop vient d'etre installe pour la 1ere fois, REDEMARREZ votre PC."
             Write-Host "  4. Une fois l'icone Docker verte ('Engine running'), relancez simplement :"
-            Write-Host "     irm `"https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.ps1?v=`$(Get-Random)`" | iex" -ForegroundColor Green
+            Write-Host "     irm `"https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.ps1?v=`$(Get-Random)`" | iex" -ForegroundColor Green
         }
         Write-Host ""
         Fail "Docker Desktop n'est pas encore pret. Suivez les instructions ci-dessus."

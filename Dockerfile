@@ -1,5 +1,10 @@
 FROM php:8.3.36-apache
 
+ARG APP_VERSION=1.4.0
+LABEL org.opencontainers.image.title="Nodalibre" \
+      org.opencontainers.image.version="$APP_VERSION" \
+      org.opencontainers.image.description="Assistant IA libre et auto-hébergeable"
+
 # Cacher la version de PHP et les détails d'Apache pour la sécurité
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && sed -i 's/expose_php = On/expose_php = Off/g' "$PHP_INI_DIR/php.ini" \
