@@ -732,7 +732,7 @@ $aiBubbleReply = workspace_coder_bubble_reply($aiFilesDraft, $aiCodeReply, $t);
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= htmlspecialchars($t('workspace_title')) ?> - Nodalibre</title>
-<link rel="icon" href="nodalibre-icon.png" type="image/png">
+<link rel="icon" href="assets/branding/nodalibre-icon.png" type="image/png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -915,13 +915,13 @@ select,.branch-input,input,textarea{background:#0d0d15;color:var(--text);border-
 @media(max-width:1100px){.coder-shell{grid-template-columns:1fr;height:auto}.coder-chat{min-height:520px;border-right:0;border-bottom:1px solid #dbdce5}.coder-code-panel .generated-review{height:auto;min-height:520px}}
 @media(max-width:900px){.app{grid-template-columns:1fr}.side{position:static;border-right:0;border-bottom:1px solid var(--line)}.main{padding:0}.coder-shell{height:auto;min-height:0}.coder-chat{padding:28px 14px}.selectors,.workspace-panels,.coder-code-panel .generated-review{grid-template-columns:1fr}.top-actions{position:fixed;right:10px;top:10px}.preview-panel{inset:8px}}
 </style>
-<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
 </head>
 <body>
 <div class="app">
   <aside class="side">
     <div class="side-top">
-      <img class="mark" src="nodalibre-icon.png" alt="Nodalibre">
+      <img class="mark" src="assets/branding/nodalibre-icon.png" alt="Nodalibre">
       <button class="side-toggle" type="button" aria-label="Réduire la barre" onclick="toggleWorkspaceSidebar()"><i class="fa-solid fa-table-columns"></i></button>
     </div>
     <div class="side-section">

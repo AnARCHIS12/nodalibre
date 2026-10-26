@@ -48,7 +48,7 @@ $defaultModel = MASTER_AGENT_MODEL;
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nodalibre — <?= htmlspecialchars($t('app_subtitle')) ?></title>
-<link rel="icon" href="nodalibre-icon.png" type="image/png">
+<link rel="icon" href="assets/branding/nodalibre-icon.png" type="image/png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
@@ -1320,7 +1320,7 @@ body {
   .main.welcome-mode .starter-card { padding: 12px; }
 }
 </style>
-<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
 </head>
 <body>
 
@@ -1336,7 +1336,7 @@ body {
 
   <div class="sidebar-top">
     <div class="brand">
-      <img class="brand-logo" src="nodalibre-logo-dark.png" alt="Nodalibre">
+      <img class="brand-logo" src="assets/branding/nodalibre-logo-dark.png" alt="Nodalibre">
     </div>
     <button class="new-chat-btn" onclick="newChat()">
       <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
@@ -1450,7 +1450,7 @@ body {
 
       <!-- Welcome screen -->
       <div id="welcome" class="welcome">
-        <img class="welcome-logo" src="nodalibre-logo-dark.png" alt="Nodalibre">
+        <img class="welcome-logo" src="assets/branding/nodalibre-logo-dark.png" alt="Nodalibre">
         <h1><?= htmlspecialchars($t('hello')) ?><?= $user ? ', ' . htmlspecialchars($user['username']) : '' ?></h1>
         <p class="welcome-sub"><?= htmlspecialchars($t('welcome_sub')) ?></p>
         <div class="welcome-manifesto">
@@ -2655,7 +2655,7 @@ function appendAiMsg(text, model, isErr = false, sources = [], images = [], toke
   const modelShort = displayModelName(model);
 
   div.innerHTML = `
-    <img class="ai-avatar" src="nodalibre-icon.png" alt="">
+    <img class="ai-avatar" src="assets/branding/nodalibre-icon.png" alt="">
     <div class="ai-body">
       <div class="ai-meta">
         <span class="ai-name">Nodalibre</span>
@@ -2726,7 +2726,7 @@ function appendThinking(label = '') {
   div.id        = id;
   div.className = 'msg msg-ai';
   div.innerHTML = `
-    <img class="ai-avatar" src="nodalibre-icon.png" alt="">
+    <img class="ai-avatar" src="assets/branding/nodalibre-icon.png" alt="">
     <div class="ai-body">
       <div class="thinking-wrap">
         <div class="thinking">

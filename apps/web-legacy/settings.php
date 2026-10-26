@@ -86,7 +86,7 @@ $memoryRows = $db->fetchAll(
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= htmlspecialchars($t('settings')) ?> — Nodalibre</title>
-<link rel="icon" href="nodalibre-icon.png" type="image/png">
+<link rel="icon" href="assets/branding/nodalibre-icon.png" type="image/png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -128,12 +128,12 @@ h1{font-family:Georgia,"Times New Roman",serif;font-size:28px;margin-bottom:32px
 .memory-meta{font-size:11.5px;color:var(--muted)}
 .memory-empty{font-size:13px;color:var(--muted);line-height:1.5}
 </style>
-<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
 </head>
 <body>
 <div class="wrap">
   <a href="index.php" class="back"><i class="fa-solid fa-arrow-left"></i> <?= htmlspecialchars($t('back_chat')) ?></a>
-  <img class="settings-logo" src="nodalibre-logo-dark.png" alt="Nodalibre">
+  <img class="settings-logo" src="assets/branding/nodalibre-logo-dark.png" alt="Nodalibre">
   <h1><?= htmlspecialchars($t('settings')) ?></h1>
 
   <?php if ($success): ?>

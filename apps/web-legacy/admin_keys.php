@@ -159,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= htmlspecialchars($t('server_keys_title')) ?> — Nodalibre</title>
-<link rel="icon" href="nodalibre-icon.png" type="image/png">
+<link rel="icon" href="assets/branding/nodalibre-icon.png" type="image/png">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0a0a0f;--card:#13131a;--border:#1e1e2e;--text:#e8e6f0;--muted:#6b6880;--accent:#e6122a;--accent2:#ff3b4f;--err:#f87171;--success:#4ade80}
@@ -195,12 +195,12 @@ input:focus{outline:none;border-color:var(--accent)}
 @keyframes pulse-green{0%,100%{box-shadow:0 0 4px #4ade80}50%{box-shadow:0 0 10px #4ade80,0 0 20px rgba(74,222,128,.35)}}
 .online-dot{animation:pulse-green 2s ease-in-out infinite}
 </style>
-<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
 </head>
 <body>
 <div class="wrap">
   <div class="top">
-    <img class="logo" src="nodalibre-logo-dark.png" alt="Nodalibre">
+    <img class="logo" src="assets/branding/nodalibre-logo-dark.png" alt="Nodalibre">
     <a class="back" href="index.php"><?= htmlspecialchars($t('back_chat')) ?></a>
   </div>
 

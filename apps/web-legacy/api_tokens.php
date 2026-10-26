@@ -65,7 +65,7 @@ $chatUrl = $baseUrl . '/chat.php';
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= htmlspecialchars($t('internal_keys_title')) ?> — Nodalibre</title>
-<link rel="icon" href="nodalibre-icon.png" type="image/png">
+<link rel="icon" href="assets/branding/nodalibre-icon.png" type="image/png">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0a0a0f;--card:#13131a;--border:#1e1e2e;--text:#e8e6f0;--muted:#6b6880;--accent:#e6122a;--accent2:#ff3b4f;--err:#f87171;--success:#4ade80}
@@ -98,12 +98,12 @@ input:focus{outline:none;border-color:var(--accent)}
 pre{white-space:pre-wrap;background:#050506;border:1px solid var(--border);border-radius:10px;padding:14px;color:#e8e6f0;overflow:auto;font-size:13px}
 @media(max-width:760px){.grid,.token-row{grid-template-columns:1fr}.logo{max-width:100%}.top{align-items:flex-start;flex-direction:column}}
 </style>
-<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
 </head>
 <body>
 <div class="wrap">
   <div class="top">
-    <img class="logo" src="nodalibre-logo-dark.png" alt="Nodalibre">
+    <img class="logo" src="assets/branding/nodalibre-logo-dark.png" alt="Nodalibre">
     <a class="back" href="index.php"><?= htmlspecialchars($t('back_chat')) ?></a>
   </div>
 

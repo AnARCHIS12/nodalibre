@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= htmlspecialchars($t('register')) ?> — Nodalibre</title>
-<link rel="icon" href="nodalibre-icon.png" type="image/png">
+<link rel="icon" href="assets/branding/nodalibre-icon.png" type="image/png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -80,12 +80,12 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .lang-switch a{color:var(--muted);text-decoration:none;margin:0 5px}
 .lang-switch a.active,.lang-switch a:hover{color:var(--accent2)}
 </style>
-<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
 </head>
 <body>
 <div class="card">
   <div class="brand">
-    <img class="brand-logo" src="nodalibre-logo-dark.png" alt="Nodalibre">
+    <img class="brand-logo" src="assets/branding/nodalibre-logo-dark.png" alt="Nodalibre">
     <div class="brand-sub"><?= htmlspecialchars($t('register')) ?></div>
   </div>
 

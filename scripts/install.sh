@@ -39,7 +39,7 @@ usage() {
 Nodalibre - installateur interactif
 
 Usage:
-  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh
+  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh
 
 Options:
   --yes             utilise les valeurs par défaut / variables d'environnement
@@ -65,9 +65,9 @@ Variables d'environnement:
   NODALIBRE_INSTALL_DOCKER=1
 
 Exemples:
-  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh
-  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | NODALIBRE_YES=1 sh
-  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh -s -- --port 8080
+  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh
+  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | NODALIBRE_YES=1 sh
+  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh -s -- --port 8080
 EOF
 }
 

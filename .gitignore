@@ -1,6 +1,8 @@
 /.env
 /data/
 /sandbox/
+/apps/web-legacy/data/
+/apps/web-legacy/sandbox/
 *.sqlite
 *.sqlite3
 *.db

@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= htmlspecialchars($t('setup_title')) ?> — Nodalibre</title>
-<link rel="icon" href="nodalibre-icon.png" type="image/png">
+<link rel="icon" href="assets/branding/nodalibre-icon.png" type="image/png">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0a0a0f;--card:#13131a;--border:#1e1e2e;--text:#e8e6f0;--muted:#6b6880;--accent:#e6122a;--accent2:#ff3b4f;--err:#f87171}
@@ -101,12 +101,12 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .lang-switch a.active,.lang-switch a:hover{color:var(--accent2)}
 @media (max-width:640px){.card{padding:34px 24px}.grid{grid-template-columns:1fr}}
 </style>
-<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
 </head>
 <body>
 <div class="card">
   <div class="brand">
-    <img class="brand-logo" src="nodalibre-logo-dark.png" alt="Nodalibre">
+    <img class="brand-logo" src="assets/branding/nodalibre-logo-dark.png" alt="Nodalibre">
     <div class="brand-sub"><?= htmlspecialchars($t('setup_title')) ?></div>
   </div>
 

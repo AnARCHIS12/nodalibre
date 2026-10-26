@@ -16,5 +16,6 @@ Prochain lot : stockage chiffré des comptes fournisseurs, migrations SQLite,
 authentification « Sign in with ChatGPT », puis routes de compatibilité V1.
 
 ```bash
+cd apps/api-v2
 go test ./...
 ```

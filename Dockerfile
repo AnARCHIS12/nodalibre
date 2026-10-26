@@ -19,11 +19,12 @@ RUN apt-get update \
 
 WORKDIR /var/www/html
 
-COPY . /var/www/html/
+COPY apps/web-legacy/ /var/www/html/
+COPY assets/branding/ /var/www/html/assets/branding/
+COPY scripts/docker-entrypoint.sh /usr/local/bin/nodalibre-entrypoint
 
 RUN mkdir -p /var/www/html/data /var/www/html/sandbox \
     && chown -R www-data:www-data /var/www/html/data /var/www/html/sandbox \
-    && cp /var/www/html/docker-entrypoint.sh /usr/local/bin/nodalibre-entrypoint \
     && chmod +x /usr/local/bin/nodalibre-entrypoint \
     && find /var/www/html -type f -name "*.php" -exec php -l {} \; >/tmp/php-lint.log \
     && rm -f /tmp/php-lint.log

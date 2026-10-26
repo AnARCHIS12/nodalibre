@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="nodalibre-logo-dark.png" alt="Nodalibre" width="520">
+  <img src="assets/branding/nodalibre-logo-dark.png" alt="Nodalibre" width="520">
 </p>
 
 <p align="center">
@@ -33,6 +33,11 @@
 **Nodalibre** est une interface conversationnelle web inspirée des assistants IA modernes, conçue pour tourner sur un hébergement mutualisé type Hostinger ou en conteneur Docker.
 
 Le projet utilise PHP pur, SQLite, cURL et l'API Mistral. Il inclut une installation initiale, une authentification, un historique de conversations, une rotation des clés API et une interface responsive rouge/noir.
+
+La V1 PHP reste disponible pendant la transition. La réécriture Go et son
+architecture multi-fournisseur sont documentées dans
+[`apps/api-v2/`](apps/api-v2/) et
+[`docs/architecture/v2.md`](docs/architecture/v2.md).
 
 ## Fonctionnalités
 
@@ -109,7 +114,7 @@ Nodalibre détecte les demandes d'image courantes (`génère une image`, `dessin
 
 | Logo sombre | Logo clair | Icône |
 | --- | --- | --- |
-| <img src="nodalibre-logo-dark.png" alt="Logo sombre Nodalibre" width="260"> | <img src="nodalibre-logo-light.png" alt="Logo clair Nodalibre" width="260"> | <img src="nodalibre-icon.png" alt="Icône Nodalibre" width="96"> |
+| <img src="assets/branding/nodalibre-logo-dark.png" alt="Logo sombre Nodalibre" width="260"> | <img src="assets/branding/nodalibre-logo-light.png" alt="Logo clair Nodalibre" width="260"> | <img src="assets/branding/nodalibre-icon.png" alt="Icône Nodalibre" width="96"> |
 
 ## Prérequis
 
@@ -121,12 +126,14 @@ Nodalibre détecte les demandes d'image courantes (`génère une image`, `dessin
 
 ## Installation
 
-1. Envoyez tous les fichiers dans le dossier web de votre hébergement, par exemple `public_html/`.
-2. Vérifiez que PHP peut créer les dossiers `data/` et `sandbox/`.
-3. Ouvrez votre domaine dans le navigateur.
-4. Si aucun compte n'existe, Nodalibre redirige automatiquement vers `setup.php`.
-5. Créez le compte administrateur et ajoutez les clés Mistral partagées si besoin.
-6. Connectez-vous et commencez une conversation.
+Pour un hébergement PHP classique :
+
+1. Copiez le contenu de `apps/web-legacy/` dans le dossier web, par exemple `public_html/`.
+2. Copiez `assets/branding/` vers `public_html/assets/branding/`.
+3. Vérifiez que PHP peut créer les dossiers `data/` et `sandbox/`.
+4. Ouvrez votre domaine dans le navigateur.
+5. Si aucun compte n'existe, Nodalibre redirige automatiquement vers `setup.php`.
+6. Créez le compte administrateur et ajoutez les clés Mistral partagées si besoin.
 
 ## Installation Docker
 
@@ -137,7 +144,7 @@ Nodalibre peut aussi tourner dans une image Docker Apache + PHP.
 Installation moderne depuis GitHub avec `curl` :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh
 ```
 
 Le script lance un assistant interactif :
@@ -160,31 +167,31 @@ Si Docker est absent, l'installateur propose de l'installer automatiquement :
 Version avec URL GitHub classique :
 
 ```bash
-curl -fsSL https://github.com/AnARCHIS12/Nodalibre/raw/main/install.sh | sh
+curl -fsSL https://github.com/AnARCHIS12/Nodalibre/raw/main/scripts/install.sh | sh
 ```
 
 Afficher l'aide :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh -s -- --help
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh -s -- --help
 ```
 
 Changer le port sans passer par les questions :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh -s -- --port 8080
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh -s -- --port 8080
 ```
 
 Installer dans un dossier précis :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh -s -- --dir /opt/nodalibre
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh -s -- --dir /opt/nodalibre
 ```
 
 Installation automatique sans interaction :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | \
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | \
   NODALIBRE_YES=1 \
   NODALIBRE_PORT=8080 \
   sh
@@ -193,19 +200,19 @@ curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.s
 Préparer les fichiers sans démarrer Docker :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh -s -- --no-start
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh -s -- --no-start
 ```
 
 Refuser l'installation automatique de Docker :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh -s -- --no-install-docker
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | sh -s -- --no-install-docker
 ```
 
 Avec OAuth GitHub dès l'installation :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | \
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.sh | \
   NODALIBRE_YES=1 \
   GITHUB_OAUTH_CLIENT_ID=votre_client_id \
   GITHUB_OAUTH_CLIENT_SECRET=votre_client_secret \
@@ -218,7 +225,7 @@ curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.s
 Depuis PowerShell, lancez l'installateur interactif Windows :
 
 ```powershell
-irm https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.ps1 | iex
 ```
 
 Le script demande :
@@ -237,7 +244,7 @@ Si Docker Desktop ou WSL sont absents, le script configure automatiquement WSL 2
 Avec options, téléchargez puis lancez le script :
 
 ```powershell
-irm https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.ps1 -OutFile install.ps1
+irm https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/scripts/install.ps1 -OutFile install.ps1
 powershell -ExecutionPolicy Bypass -File .\install.ps1 -Port 8080 -Dir "$env:USERPROFILE\Nodalibre"
 ```
 
@@ -518,47 +525,36 @@ Après ça, le bouton `Se connecter avec GitHub` apparaît dans le Workspace. L'
 ## Structure
 
 ```text
-votre-domaine.com/
-├── index.php                         Interface principale
-├── setup.php                         Installation initiale
-├── login.php                         Connexion
-├── register.php                      Inscription
-├── logout.php                        Déconnexion
-├── settings.php                      Paramètres utilisateur
-├── admin_keys.php                    Pool de clés Mistral serveur
-├── api_tokens.php                    Clés API internes Nodalibre
-├── workspace.php                     Workspace code et connexion GitHub
-├── workspace_api.php                 API de sauvegarde des blocs de code
-├── chat.php                          API de chat
-├── transcribe.php                    API dictée vocale Voxtral
-├── speak.php                         API réponse vocale
-├── ocr.php                           API OCR et analyse de documents
-├── image_generate.php                API génération d'images
-├── conversations.php                 API conversations
-├── auth.php                          Authentification
-├── i18n.php                          Traductions multilingues
-├── config.php                        Configuration globale
-├── database.php                      Accès SQLite et schéma
-├── mistral.php                        Client API Mistral
-├── github_oauth.php                  Callback OAuth GitHub
-├── install.sh                        Installateur one-line curl
-├── install.ps1                       Installateur Windows PowerShell
-├── Dockerfile                        Image Docker Apache + PHP
-├── docker-entrypoint.sh              Préparation permissions Docker
-├── docker-compose.yml                Lancement Docker local
-├── docker-compose.prod.yml           Lancement production avec image publiée
-├── .env.example                      Variables Docker exemple
-├── LICENSE                           Licence MIT
-├── nodalibre-logo-dark.svg        Logo sombre, source vectorielle
-├── nodalibre-logo-light.svg       Logo clair, source vectorielle
-├── nodalibre-logo-dark.png        Logo sombre
-├── nodalibre-logo-light.png       Logo clair
-├── nodalibre-icon.svg             Icône, source vectorielle
-├── nodalibre-icon.png             Icône / favicon
-└── data/
-    ├── nodalibre.sqlite           Base créée automatiquement
-    └── nodalibre.log              Logs applicatifs
+Nodalibre/
+├── apps/
+│   ├── web-legacy/                  Application PHP V1 maintenue
+│   │   ├── assets/css/              Styles de l'interface
+│   │   ├── index.php                Interface principale
+│   │   ├── chat.php                 API de chat
+│   │   ├── mistral.php              Adaptateur Mistral historique
+│   │   └── ...
+│   └── api-v2/                      Nouveau cœur Go multi-fournisseur
+│       ├── go.mod
+│       └── internal/provider/       Contrats et adaptateurs IA
+├── assets/branding/                 Logos et icônes Nodalibre
+├── docs/
+│   ├── architecture/v2.md           Architecture cible de la V2
+│   └── releases/                    Notes des versions publiées
+├── scripts/
+│   ├── install.sh                   Installateur Linux/macOS
+│   ├── install.ps1                  Installateur Windows
+│   └── docker-entrypoint.sh         Préparation du conteneur PHP
+├── Dockerfile                       Image de la V1 pendant la migration
+├── docker-compose.yml               Développement local
+├── docker-compose.prod.yml          Déploiement avec l'image publiée
+├── .env.example                     Variables d'environnement
+├── LICENSE
+└── README.md
 ```
+
+La V1 PHP est isolée et reste fonctionnelle pendant la migration. Le nouveau
+code doit être ajouté dans `apps/api-v2/`; il ne doit pas recréer de fichiers
+PHP à la racine du dépôt.
 
 ## Base de données
 
