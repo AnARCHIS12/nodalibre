@@ -1,21 +1,21 @@
 #!/bin/sh
 set -eu
 
-APP_NAME="Libre Claude"
-DEFAULT_DIR="${HOME:-.}/libre-claude"
-DEFAULT_IMAGE="liberchat/libre-claude:latest"
+APP_NAME="Nodalibre"
+DEFAULT_DIR="${HOME:-.}/nodalibre"
+DEFAULT_IMAGE="liberchat/nodalibre:latest"
 DEFAULT_PORT="8173"
 
-INSTALL_DIR="${LIBRE_CLAUDE_DIR:-$DEFAULT_DIR}"
-IMAGE="${LIBRE_CLAUDE_IMAGE:-$DEFAULT_IMAGE}"
-PORT="${LIBRE_CLAUDE_PORT:-$DEFAULT_PORT}"
+INSTALL_DIR="${NODALIBRE_DIR:-$DEFAULT_DIR}"
+IMAGE="${NODALIBRE_IMAGE:-$DEFAULT_IMAGE}"
+PORT="${NODALIBRE_PORT:-$DEFAULT_PORT}"
 PUBLIC_URL_VALUE="${PUBLIC_URL:-}"
 CLIENT_ID="${GITHUB_OAUTH_CLIENT_ID:-}"
 CLIENT_SECRET="${GITHUB_OAUTH_CLIENT_SECRET:-}"
 CLIENT_SCOPE="${GITHUB_OAUTH_SCOPE:-}"
-YES="${LIBRE_CLAUDE_YES:-0}"
-NO_START="${LIBRE_CLAUDE_NO_START:-0}"
-INSTALL_DOCKER="${LIBRE_CLAUDE_INSTALL_DOCKER:-1}"
+YES="${NODALIBRE_YES:-0}"
+NO_START="${NODALIBRE_NO_START:-0}"
+INSTALL_DOCKER="${NODALIBRE_INSTALL_DOCKER:-1}"
 DRY_RUN=0
 
 if [ -t 1 ]; then
@@ -36,10 +36,10 @@ die() { red "Erreur: $*"; exit 1; }
 
 usage() {
   cat <<EOF
-Libre Claude - installateur interactif
+Nodalibre - installateur interactif
 
 Usage:
-  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | sh
+  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh
 
 Options:
   --yes             utilise les valeurs par défaut / variables d'environnement
@@ -54,20 +54,20 @@ Options:
   -h, --help        aide
 
 Variables d'environnement:
-  LIBRE_CLAUDE_DIR=/opt/libre-claude
-  LIBRE_CLAUDE_PORT=8173
-  LIBRE_CLAUDE_IMAGE=liberchat/libre-claude:latest
-  PUBLIC_URL=https://libre-claude.example.com
+  NODALIBRE_DIR=/opt/nodalibre
+  NODALIBRE_PORT=8173
+  NODALIBRE_IMAGE=liberchat/nodalibre:latest
+  PUBLIC_URL=https://nodalibre.example.com
   GITHUB_OAUTH_CLIENT_ID=...
   GITHUB_OAUTH_CLIENT_SECRET=...
-  LIBRE_CLAUDE_YES=1
-  LIBRE_CLAUDE_NO_START=1
-  LIBRE_CLAUDE_INSTALL_DOCKER=1
+  NODALIBRE_YES=1
+  NODALIBRE_NO_START=1
+  NODALIBRE_INSTALL_DOCKER=1
 
 Exemples:
-  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | sh
-  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | LIBRE_CLAUDE_YES=1 sh
-  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | sh -s -- --port 8080
+  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh
+  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | NODALIBRE_YES=1 sh
+  curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh -s -- --port 8080
 EOF
 }
 
@@ -189,7 +189,7 @@ persist_path_dir() {
     profile="$HOME/.profile"
     line="export PATH=\"$path_dir:\$PATH\""
     if [ ! -f "$profile" ] || ! grep -F "$line" "$profile" >/dev/null 2>&1; then
-      printf '\n# Libre Claude / Docker\n%s\n' "$line" >> "$profile" 2>/dev/null || true
+      printf '\n# Nodalibre / Docker\n%s\n' "$line" >> "$profile" 2>/dev/null || true
     fi
   fi
 }
@@ -204,8 +204,8 @@ install_docker_linux() {
   fi
 
   yellow "Installation de Docker Engine avec le script officiel Docker..."
-  curl -fsSL https://get.docker.com -o /tmp/libre-claude-get-docker.sh
-  $sudo_cmd sh /tmp/libre-claude-get-docker.sh
+  curl -fsSL https://get.docker.com -o /tmp/nodalibre-get-docker.sh
+  $sudo_cmd sh /tmp/nodalibre-get-docker.sh
 
   if command -v systemctl >/dev/null 2>&1; then
     $sudo_cmd systemctl enable --now docker >/dev/null 2>&1 || true
@@ -282,7 +282,7 @@ if has_tty; then
     CLIENT_ID="$(ask_value "GitHub OAuth Client ID" "$CLIENT_ID")"
     CLIENT_SECRET="$(ask_secret "GitHub OAuth Client Secret" "$CLIENT_SECRET")"
   fi
-  if ask_yes_no "Lancer Libre Claude après l'installation ?" "yes"; then
+  if ask_yes_no "Lancer Nodalibre après l'installation ?" "yes"; then
     NO_START=0
   else
     NO_START=1
@@ -333,11 +333,12 @@ PUBLIC_URL=$PUBLIC_URL_VALUE
 GITHUB_OAUTH_CLIENT_ID=$CLIENT_ID
 GITHUB_OAUTH_CLIENT_SECRET=$CLIENT_SECRET
 GITHUB_OAUTH_SCOPE=$CLIENT_SCOPE
+MISTRAL_API_KEYS=
 EOF
 
 cat > "$INSTALL_DIR/docker-compose.yml" <<EOF
 services:
-  libre-claude:
+  nodalibre:
     image: $IMAGE
     ports:
       - "$PORT:80"
@@ -391,12 +392,12 @@ cd "$INSTALL_DIR"
 green "Téléchargement de l'image..."
 $COMPOSE pull
 
-green "Démarrage de Libre Claude..."
+green "Démarrage de Nodalibre..."
 $COMPOSE up -d
 
 cat <<EOF
 
-Libre Claude est installé.
+Nodalibre est installé.
 
 Ouvrir:
   http://127.0.0.1:$PORT

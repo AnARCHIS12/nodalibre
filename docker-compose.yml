@@ -1,9 +1,9 @@
 services:
-  libre-claude:
+  nodalibre:
     build:
       context: .
       dockerfile: Dockerfile
-    image: libre-claude:local
+    image: nodalibre:local
     ports:
       - "8173:80"
     environment:
@@ -11,6 +11,7 @@ services:
       GITHUB_OAUTH_CLIENT_ID: ${GITHUB_OAUTH_CLIENT_ID:-}
       GITHUB_OAUTH_CLIENT_SECRET: ${GITHUB_OAUTH_CLIENT_SECRET:-}
       GITHUB_OAUTH_SCOPE: ${GITHUB_OAUTH_SCOPE:-}
+      MISTRAL_API_KEYS: ${MISTRAL_API_KEYS:-}
     volumes:
       - ./data:/var/www/html/data
       - ./sandbox:/var/www/html/sandbox

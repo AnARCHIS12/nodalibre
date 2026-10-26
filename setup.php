@@ -1,6 +1,6 @@
 <?php
 /**
- * Libre Claude - Installation de l'instance
+ * Nodalibre - Installation de l'instance
  */
 require_once dirname(__FILE__) . '/config.php';
 require_once dirname(__FILE__) . '/database.php';
@@ -23,7 +23,7 @@ function parse_setup_api_keys($value) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $instanceName = trim($_POST['instance_name'] ?? 'Libre Claude');
+    $instanceName = trim($_POST['instance_name'] ?? 'Nodalibre');
     $username     = trim($_POST['username'] ?? '');
     $email        = trim($_POST['email'] ?? '');
     $password     = $_POST['password'] ?? '';
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         } catch (Exception $e) {
             $db->rollback();
-            libreclaude_log("Setup error: " . $e->getMessage(), 1);
+            nodalibre_log("Setup error: " . $e->getMessage(), 1);
             $error = $t('setup_failed');
         }
     }
@@ -73,8 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><?= htmlspecialchars($t('setup_title')) ?> — Libre Claude</title>
-<link rel="icon" href="libre-claude-icon.png" type="image/png">
+<title><?= htmlspecialchars($t('setup_title')) ?> — Nodalibre</title>
+<link rel="icon" href="nodalibre-icon.png" type="image/png">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0a0a0f;--card:#13131a;--border:#1e1e2e;--text:#e8e6f0;--muted:#6b6880;--accent:#e6122a;--accent2:#ff3b4f;--err:#f87171}
@@ -106,7 +106,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <body>
 <div class="card">
   <div class="brand">
-    <img class="brand-logo" src="libre-claude-red-black-dark.png" alt="Libre Claude">
+    <img class="brand-logo" src="nodalibre-logo-dark.png" alt="Nodalibre">
     <div class="brand-sub"><?= htmlspecialchars($t('setup_title')) ?></div>
   </div>
 
@@ -117,7 +117,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <form method="POST" autocomplete="on">
     <div class="field">
       <label><?= htmlspecialchars($t('instance_name')) ?></label>
-      <input type="text" name="instance_name" value="<?= htmlspecialchars($_POST['instance_name'] ?? 'Libre Claude') ?>" required>
+      <input type="text" name="instance_name" value="<?= htmlspecialchars($_POST['instance_name'] ?? 'Nodalibre') ?>" required>
     </div>
 
     <div class="grid">

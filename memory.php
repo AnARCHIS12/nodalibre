@@ -1,6 +1,6 @@
 <?php
 /**
- * Libre Claude - mémoire utilisateur et contexte workspace
+ * Nodalibre - mémoire utilisateur et contexte workspace
  */
 
 function memory_user_settings($user) {

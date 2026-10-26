@@ -23,12 +23,12 @@ COPY . /var/www/html/
 
 RUN mkdir -p /var/www/html/data /var/www/html/sandbox \
     && chown -R www-data:www-data /var/www/html/data /var/www/html/sandbox \
-    && cp /var/www/html/docker-entrypoint.sh /usr/local/bin/libre-claude-entrypoint \
-    && chmod +x /usr/local/bin/libre-claude-entrypoint \
+    && cp /var/www/html/docker-entrypoint.sh /usr/local/bin/nodalibre-entrypoint \
+    && chmod +x /usr/local/bin/nodalibre-entrypoint \
     && find /var/www/html -type f -name "*.php" -exec php -l {} \; >/tmp/php-lint.log \
     && rm -f /tmp/php-lint.log
 
 EXPOSE 80
 
-ENTRYPOINT ["libre-claude-entrypoint"]
+ENTRYPOINT ["nodalibre-entrypoint"]
 CMD ["apache2-foreground"]

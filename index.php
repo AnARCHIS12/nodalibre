@@ -1,6 +1,6 @@
 <?php
 /**
- * Libre Claude - Interface principale conversationnelle
+ * Nodalibre - Interface principale conversationnelle
  * Tout est à la racine — index.php
  */
 require_once dirname(__FILE__) . '/config.php';
@@ -20,8 +20,8 @@ $user = $auth->getCurrentUser();
 $lang = current_language($user);
 $t = fn($key) => t($key, $lang);
 $jsText = fn($key) => htmlspecialchars(json_encode($t($key), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), ENT_QUOTES, 'UTF-8');
-$githubRepoUrl = 'https://github.com/AnARCHIS12/Libre-claude';
-$githubReleaseApi = 'https://api.github.com/repos/AnARCHIS12/Libre-claude/releases/latest';
+$githubRepoUrl = 'https://github.com/AnARCHIS12/Nodalibre';
+$githubReleaseApi = 'https://api.github.com/repos/AnARCHIS12/Nodalibre/releases/latest';
 
 // Conversations récentes si connecté
 $recentConvs = [];
@@ -47,8 +47,8 @@ $defaultModel = MASTER_AGENT_MODEL;
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Libre Claude — <?= htmlspecialchars($t('app_subtitle')) ?></title>
-<link rel="icon" href="libre-claude-icon.png" type="image/png">
+<title>Nodalibre — <?= htmlspecialchars($t('app_subtitle')) ?></title>
+<link rel="icon" href="nodalibre-icon.png" type="image/png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
@@ -1336,7 +1336,7 @@ body {
 
   <div class="sidebar-top">
     <div class="brand">
-      <img class="brand-logo" src="libre-claude-red-black-dark.png" alt="Libre Claude">
+      <img class="brand-logo" src="nodalibre-logo-dark.png" alt="Nodalibre">
     </div>
     <button class="new-chat-btn" onclick="newChat()">
       <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
@@ -1400,7 +1400,7 @@ body {
     <?php if ($user && ($user['role'] ?? '') === 'admin'): ?>
     <a href="admin_keys.php" class="nav-link">
       <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L7 17H4v-3l3.257-3.257A6 6 0 1118 8zm-6-2a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"/></svg>
-      <?= htmlspecialchars($t('claude_keys')) ?>
+      <?= htmlspecialchars($t('provider_keys')) ?>
     </a>
     <?php endif; ?>
     <?php if ($user): ?>
@@ -1450,7 +1450,7 @@ body {
 
       <!-- Welcome screen -->
       <div id="welcome" class="welcome">
-        <img class="welcome-logo" src="libre-claude-red-black-dark.png" alt="Libre Claude">
+        <img class="welcome-logo" src="nodalibre-logo-dark.png" alt="Nodalibre">
         <h1><?= htmlspecialchars($t('hello')) ?><?= $user ? ', ' . htmlspecialchars($user['username']) : '' ?></h1>
         <p class="welcome-sub"><?= htmlspecialchars($t('welcome_sub')) ?></p>
         <div class="welcome-manifesto">
@@ -1518,7 +1518,7 @@ body {
           <?php endforeach; ?>
         </select>
         <button type="button" class="model-picker-btn" id="model-picker-btn" onclick="toggleModelMenu()" aria-haspopup="listbox" aria-expanded="false">
-          <span id="model-picker-label"><?= htmlspecialchars($modelNames[$defaultModel] ?? 'Claude Sonnet 5') ?></span>
+          <span id="model-picker-label"><?= htmlspecialchars($modelNames[$defaultModel] ?? 'Mistral Small 4') ?></span>
           <i class="fa-solid fa-chevron-down"></i>
         </button>
         <div class="model-menu" id="model-menu" role="listbox" aria-label="<?= htmlspecialchars($t('choose_model')) ?>">
@@ -1952,7 +1952,7 @@ function selectModel(button) {
 }
 
 function displayModelName(model) {
-  return modelNames[model] || model || 'Libre Claude';
+  return modelNames[model] || model || 'Nodalibre';
 }
 
 document.addEventListener('click', event => {
@@ -2655,10 +2655,10 @@ function appendAiMsg(text, model, isErr = false, sources = [], images = [], toke
   const modelShort = displayModelName(model);
 
   div.innerHTML = `
-    <img class="ai-avatar" src="libre-claude-icon.png" alt="">
+    <img class="ai-avatar" src="nodalibre-icon.png" alt="">
     <div class="ai-body">
       <div class="ai-meta">
-        <span class="ai-name">Libre Claude</span>
+        <span class="ai-name">Nodalibre</span>
         ${model ? `<span class="ai-model">${escHtml(modelShort)}</span>` : ''}
         ${tokensUsed > 0 ? `<span class="ai-tokens" style="font-size:11px;color:var(--muted);background:rgba(255,255,255,.05);padding:2px 6px;border-radius:6px;margin-left:6px;"><i class="fa-solid fa-microchip" style="margin-right:4px;"></i>${tokensUsed} tokens</span>` : ''}
       </div>
@@ -2701,7 +2701,7 @@ function renderImages(images) {
     return `
       <div class="generated-image-card">
         <img src="${url}" alt="${escHtml(uiText.generated_images)} ${index + 1}" loading="lazy">
-        <a class="generated-image-download" href="${url}" download="libre-claude-image-${index + 1}.png" title="${escHtml(uiText.generated_images)}" aria-label="${escHtml(uiText.generated_images)}">
+        <a class="generated-image-download" href="${url}" download="nodalibre-image-${index + 1}.png" title="${escHtml(uiText.generated_images)}" aria-label="${escHtml(uiText.generated_images)}">
           <i class="fa-solid fa-download"></i>
         </a>
       </div>
@@ -2726,7 +2726,7 @@ function appendThinking(label = '') {
   div.id        = id;
   div.className = 'msg msg-ai';
   div.innerHTML = `
-    <img class="ai-avatar" src="libre-claude-icon.png" alt="">
+    <img class="ai-avatar" src="nodalibre-icon.png" alt="">
     <div class="ai-body">
       <div class="thinking-wrap">
         <div class="thinking">
@@ -2900,7 +2900,7 @@ function renderMarkdown(text) {
   html = html.replace(/@@IMAGE_BLOCK_(\d+)@@/g, (_, index) => {
     const img = imageBlocks[Number(index)];
     if (!img) return '';
-    return `<div class="generated-image-wrap"><img src="${img.src}" alt="${escHtml(img.alt)}" class="generated-img" onclick="this.requestFullscreen&&this.requestFullscreen()"><a class="generated-image-download" href="${img.src}" download="libre-claude-image.png" title="Télécharger l'image"><i class="fa-solid fa-download"></i></a></div>`;
+    return `<div class="generated-image-wrap"><img src="${img.src}" alt="${escHtml(img.alt)}" class="generated-img" onclick="this.requestFullscreen&&this.requestFullscreen()"><a class="generated-image-download" href="${img.src}" download="nodalibre-image.png" title="Télécharger l'image"><i class="fa-solid fa-download"></i></a></div>`;
   });
 
   // Nettoyage

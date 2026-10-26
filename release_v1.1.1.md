@@ -14,8 +14,8 @@
 
 ### Points forts
 
-- Interface Libre Claude rouge/noir avec historique utilisateur
-- Image Docker Hub multi-architecture linux/amd64 et linux/arm64 : liberchat/libre-claude:latest
+- Interface Nodalibre rouge/noir avec historique utilisateur
+- Image Docker Hub multi-architecture linux/amd64 et linux/arm64 : liberchat/nodalibre:latest
 - Installateurs interactifs Linux/macOS et Windows
 - Workspace GitHub avec OAuth, création de dépôts, édition de fichiers et commits multi-fichiers
 - Mémoire automatique utilisateur et contexte workspace
@@ -29,20 +29,20 @@
 
 ### Linux/macOS :
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh
 ```
 
 ### Windows PowerShell :
 ```powershell
-irm https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.ps1 | iex
 ```
 
 ### Docker :
 ```bash
 docker run -d \
-  --name libre-claude \
+  --name nodalibre \
   -p 8173:80 \
   -v "$PWD/data:/var/www/html/data" \
   -v "$PWD/sandbox:/var/www/html/sandbox" \
-  liberchat/libre-claude:latest
+  liberchat/nodalibre:latest
 ```

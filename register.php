@@ -1,6 +1,6 @@
 <?php
 /**
- * Libre Claude - Inscription
+ * Nodalibre - Inscription
  */
 require_once dirname(__FILE__) . '/config.php';
 require_once dirname(__FILE__) . '/auth.php';
@@ -48,8 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><?= htmlspecialchars($t('register')) ?> — Libre Claude</title>
-<link rel="icon" href="libre-claude-icon.png" type="image/png">
+<title><?= htmlspecialchars($t('register')) ?> — Nodalibre</title>
+<link rel="icon" href="nodalibre-icon.png" type="image/png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -85,7 +85,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <body>
 <div class="card">
   <div class="brand">
-    <img class="brand-logo" src="libre-claude-red-black-dark.png" alt="Libre Claude">
+    <img class="brand-logo" src="nodalibre-logo-dark.png" alt="Nodalibre">
     <div class="brand-sub"><?= htmlspecialchars($t('register')) ?></div>
   </div>
 

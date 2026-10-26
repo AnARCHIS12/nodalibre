@@ -1,11 +1,11 @@
 <?php
 /**
- * Libre Claude - Dictée vocale Voxtral
+ * Nodalibre - Dictée vocale Voxtral
  */
 require_once dirname(__FILE__) . '/config.php';
 require_once dirname(__FILE__) . '/database.php';
 require_once dirname(__FILE__) . '/auth.php';
-require_once dirname(__FILE__) . '/claude.php';
+require_once dirname(__FILE__) . '/mistral.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
@@ -53,15 +53,15 @@ $language = trim($_POST['language'] ?? 'fr');
 $apiKey = $user['mistral_api_key'] ?: null;
 
 try {
-    $claude = getClaudeClient($apiKey);
-    $result = $claude->transcribe($audio['tmp_name'], $fileName, $mimeType, $language);
+    $mistral = getMistralClient($apiKey);
+    $result = $mistral->transcribe($audio['tmp_name'], $fileName, $mimeType, $language);
 
     if ($result['success']) {
         echo json_encode([
             'success'  => true,
             'text'     => $result['text'],
             'language' => $result['language'] ?? null,
-            'model'    => $result['model'] ?? 'voxtral-mini-latest',
+            'model'    => $result['model'] ?? MISTRAL_TRANSCRIPTION_MODEL,
             'usage'    => $result['usage'] ?? [],
         ]);
     } else {
@@ -71,6 +71,6 @@ try {
         ]);
     }
 } catch (Exception $e) {
-    libreclaude_log("Transcription exception: " . $e->getMessage(), 1);
+    nodalibre_log("Transcription exception: " . $e->getMessage(), 1);
     echo json_encode(['success' => false, 'error' => 'Erreur interne de transcription']);
 }

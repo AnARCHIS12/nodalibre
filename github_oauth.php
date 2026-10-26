@@ -1,6 +1,6 @@
 <?php
 /**
- * Libre Claude - Connexion OAuth GitHub
+ * Nodalibre - Connexion OAuth GitHub
  */
 require_once dirname(__FILE__) . '/config.php';
 require_once dirname(__FILE__) . '/auth.php';
@@ -59,7 +59,7 @@ function github_oauth_post($url, $fields) {
         CURLOPT_POSTFIELDS => http_build_query($fields),
         CURLOPT_HTTPHEADER => [
             'Accept: application/json',
-            'User-Agent: Libre-Claude-Workspace',
+            'User-Agent: Nodalibre-Workspace',
         ],
     ]);
     $response = curl_exec($ch);

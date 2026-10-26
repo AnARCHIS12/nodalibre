@@ -1,6 +1,6 @@
 <?php
 /**
- * Libre Claude - API Conversations (liste + détail)
+ * Nodalibre - API Conversations (liste + détail)
  */
 
 require_once dirname(__FILE__) . '/config.php';

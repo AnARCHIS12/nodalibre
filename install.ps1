@@ -1,7 +1,7 @@
 param(
-    [string]$Dir = $(if ($env:LIBRE_CLAUDE_DIR) { $env:LIBRE_CLAUDE_DIR } else { Join-Path $HOME "libre-claude" }),
-    [int]$Port = $(if ($env:LIBRE_CLAUDE_PORT) { [int]$env:LIBRE_CLAUDE_PORT } else { 8173 }),
-    [string]$Image = $(if ($env:LIBRE_CLAUDE_IMAGE) { $env:LIBRE_CLAUDE_IMAGE } else { "liberchat/libre-claude:latest" }),
+    [string]$Dir = $(if ($env:NODALIBRE_DIR) { $env:NODALIBRE_DIR } else { Join-Path $HOME "nodalibre" }),
+    [int]$Port = $(if ($env:NODALIBRE_PORT) { [int]$env:NODALIBRE_PORT } else { 8173 }),
+    [string]$Image = $(if ($env:NODALIBRE_IMAGE) { $env:NODALIBRE_IMAGE } else { "liberchat/nodalibre:latest" }),
     [string]$PublicUrl = $(if ($env:PUBLIC_URL) { $env:PUBLIC_URL } else { "" }),
     [string]$GitHubOAuthClientId = $(if ($env:GITHUB_OAUTH_CLIENT_ID) { $env:GITHUB_OAUTH_CLIENT_ID } else { "" }),
     [string]$GitHubOAuthClientSecret = $(if ($env:GITHUB_OAUTH_CLIENT_SECRET) { $env:GITHUB_OAUTH_CLIENT_SECRET } else { "" }),
@@ -392,7 +392,7 @@ function Invoke-Compose($Compose, $Arguments) {
 
 function Start-Install {
     Write-Host ""
-    Write-Host "Libre Claude - installation Windows" -ForegroundColor White
+    Write-Host "Nodalibre - installation Windows" -ForegroundColor White
     Write-Host ""
 
     if (-not $Yes) {
@@ -407,7 +407,7 @@ function Start-Install {
             $GitHubOAuthClientSecret = Ask-SecretValue "GitHub OAuth Client Secret" $GitHubOAuthClientSecret
         }
 
-        $NoStart = -not (Ask-YesNo "Lancer Libre Claude apres l'installation ?" $true)
+        $NoStart = -not (Ask-YesNo "Lancer Nodalibre apres l'installation ?" $true)
     } else {
         Write-Warn "Mode non-interactif: utilisation des parametres et variables d'environnement."
     }
@@ -459,11 +459,12 @@ PUBLIC_URL=$PublicUrl
 GITHUB_OAUTH_CLIENT_ID=$GitHubOAuthClientId
 GITHUB_OAUTH_CLIENT_SECRET=$GitHubOAuthClientSecret
 GITHUB_OAUTH_SCOPE=$GitHubOAuthScope
+MISTRAL_API_KEYS=
 "@ | Set-Content -Encoding UTF8 -Path (Join-Path $Dir ".env")
 
         @"
 services:
-  libre-claude:
+  nodalibre:
     image: $Image
     ports:
       - "$Port`:80"
@@ -514,7 +515,7 @@ services:
             Write-Host "  2. Si Docker Desktop affiche une fenetre, acceptez le contrat de licence (bouton Accept)."
             Write-Host "  3. Si WSL ou Docker Desktop vient d'etre installe pour la 1ere fois, REDEMARREZ votre PC."
             Write-Host "  4. Une fois l'icone Docker verte ('Engine running'), relancez simplement :"
-            Write-Host "     irm `"https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.ps1?v=`$(Get-Random)`" | iex" -ForegroundColor Green
+            Write-Host "     irm `"https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.ps1?v=`$(Get-Random)`" | iex" -ForegroundColor Green
         }
         Write-Host ""
         Fail "Docker Desktop n'est pas encore pret. Suivez les instructions ci-dessus."
@@ -525,14 +526,14 @@ services:
         Write-Info "Telechargement de l'image (cela peut prendre quelques minutes)..."
         Invoke-Compose $compose @("pull")
 
-        Write-Info "Demarrage de Libre Claude..."
+        Write-Info "Demarrage de Nodalibre..."
         Invoke-Compose $compose @("up", "-d")
     } finally {
         Pop-Location
     }
 
     Write-Host ""
-    Write-Ok "Libre Claude est installe et demarre !"
+    Write-Ok "Nodalibre est installe et demarre !"
     Write-Host ""
     Write-Host "Ouvrir dans votre navigateur:" -ForegroundColor Cyan
     Write-Host "  http://127.0.0.1:$Port" -ForegroundColor Green

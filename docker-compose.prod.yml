@@ -1,7 +1,7 @@
 services:
-  libre-claude:
-    image: liberchat/libre-claude:latest
-    container_name: libre-claude
+  nodalibre:
+    image: liberchat/nodalibre:latest
+    container_name: nodalibre
     ports:
       - "8173:80"
     environment:
@@ -9,11 +9,12 @@ services:
       GITHUB_OAUTH_CLIENT_ID: ${GITHUB_OAUTH_CLIENT_ID:-}
       GITHUB_OAUTH_CLIENT_SECRET: ${GITHUB_OAUTH_CLIENT_SECRET:-}
       GITHUB_OAUTH_SCOPE: ${GITHUB_OAUTH_SCOPE:-}
+      MISTRAL_API_KEYS: ${MISTRAL_API_KEYS:-}
     volumes:
-      - libre_claude_data:/var/www/html/data
-      - libre_claude_sandbox:/var/www/html/sandbox
+      - nodalibre_data:/var/www/html/data
+      - nodalibre_sandbox:/var/www/html/sandbox
     restart: unless-stopped
 
 volumes:
-  libre_claude_data:
-  libre_claude_sandbox:
+  nodalibre_data:
+  nodalibre_sandbox:

@@ -1,6 +1,6 @@
 <?php
 /**
- * Libre Claude - Paramètres utilisateur
+ * Nodalibre - Paramètres utilisateur
  */
 require_once dirname(__FILE__) . '/config.php';
 require_once dirname(__FILE__) . '/auth.php';
@@ -85,8 +85,8 @@ $memoryRows = $db->fetchAll(
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><?= htmlspecialchars($t('settings')) ?> — Libre Claude</title>
-<link rel="icon" href="libre-claude-icon.png" type="image/png">
+<title><?= htmlspecialchars($t('settings')) ?> — Nodalibre</title>
+<link rel="icon" href="nodalibre-icon.png" type="image/png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -133,7 +133,7 @@ h1{font-family:Georgia,"Times New Roman",serif;font-size:28px;margin-bottom:32px
 <body>
 <div class="wrap">
   <a href="index.php" class="back"><i class="fa-solid fa-arrow-left"></i> <?= htmlspecialchars($t('back_chat')) ?></a>
-  <img class="settings-logo" src="libre-claude-red-black-dark.png" alt="Libre Claude">
+  <img class="settings-logo" src="nodalibre-logo-dark.png" alt="Nodalibre">
   <h1><?= htmlspecialchars($t('settings')) ?></h1>
 
   <?php if ($success): ?>

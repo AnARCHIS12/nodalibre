@@ -1,6 +1,6 @@
 <?php
 /**
- * Libre Claude - Confirmation UI partagée
+ * Nodalibre - Confirmation UI partagée
  */
 
 function render_confirm_ui($t) {

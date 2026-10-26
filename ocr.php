@@ -1,11 +1,11 @@
 <?php
 /**
- * Libre Claude - Analyse OCR Mistral
+ * Nodalibre - Analyse OCR Mistral
  */
 require_once dirname(__FILE__) . '/config.php';
 require_once dirname(__FILE__) . '/database.php';
 require_once dirname(__FILE__) . '/auth.php';
-require_once dirname(__FILE__) . '/claude.php';
+require_once dirname(__FILE__) . '/mistral.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
@@ -77,8 +77,8 @@ $model = trim($_POST['model'] ?? VISION_AGENT_MODEL);
 $apiKey = $user['mistral_api_key'] ?: null;
 
 try {
-    $claude = getClaudeClient($apiKey);
-    $ocr = $claude->ocrFile($file['tmp_name'], $fileName, $mimeType);
+    $mistral = getMistralClient($apiKey);
+    $ocr = $mistral->ocrFile($file['tmp_name'], $fileName, $mimeType);
     if (empty($ocr['success'])) {
         echo json_encode(['success' => false, 'error' => $ocr['error'] ?? 'OCR impossible']);
         exit;
@@ -90,10 +90,10 @@ try {
 
     if ($prompt !== '') {
         $analysisPrompt = "Analyse le document extrait par OCR ci-dessous. Réponds en français, de façon claire et utile.\n\nDemande utilisateur : " . $prompt . "\n\nTexte OCR :\n" . $ocrText;
-        $analysis = $claude->chat([
+        $analysis = $mistral->chat([
             [
                 'role' => 'system',
-                'content' => 'Tu es Libre Claude, expert en analyse de documents OCR. Cite les éléments observables et signale quand une information est incertaine.',
+                'content' => 'Tu es Nodalibre, expert en analyse de documents OCR. Cite les éléments observables et signale quand une information est incertaine.',
             ],
             [
                 'role' => 'user',
@@ -118,6 +118,6 @@ try {
         'file_name' => $fileName,
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 } catch (Exception $e) {
-    libreclaude_log("OCR exception: " . $e->getMessage(), 1);
+    nodalibre_log("OCR exception: " . $e->getMessage(), 1);
     echo json_encode(['success' => false, 'error' => 'Erreur interne OCR']);
 }

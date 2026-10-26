@@ -1,13 +1,13 @@
 <?php
 /**
- * Libre Claude - Workspace API
- * POST JSON with a session cookie or Authorization: Bearer lc_sk_...
+ * Nodalibre - Workspace API
+ * POST JSON avec cookie de session ou jeton API interne.
  */
 
 require_once dirname(__FILE__) . '/config.php';
 require_once dirname(__FILE__) . '/database.php';
 require_once dirname(__FILE__) . '/auth.php';
-require_once dirname(__FILE__) . '/claude.php';
+require_once dirname(__FILE__) . '/mistral.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
@@ -65,7 +65,7 @@ function workspace_parse_repo($value) {
 function workspace_github_request($method, $url, $token, $body = null, &$error = '') {
     $headers = [
         'Accept: application/vnd.github+json',
-        'User-Agent: Libre-Claude-Workspace-API',
+        'User-Agent: Nodalibre-Workspace-API',
     ];
     if ($token) $headers[] = 'Authorization: Bearer ' . $token;
     if ($body !== null) $headers[] = 'Content-Type: application/json';
@@ -142,7 +142,7 @@ function workspace_github_default_branch($owner, $repo, $token, &$error) {
 
 function workspace_publish_error_message($error) {
     if (stripos($error, 'Resource not accessible by integration') !== false) {
-        return 'GitHub refuse l écriture avec ce jeton. Activez Repository permissions > Contents: Read and write dans la GitHub App, vérifiez que l app est installée sur ce dépôt, puis reconnectez GitHub dans Libre Claude. ' . $error;
+        return 'GitHub refuse l écriture avec ce jeton. Activez Repository permissions > Contents: Read and write dans la GitHub App, vérifiez que l app est installée sur ce dépôt, puis reconnectez GitHub dans Nodalibre. ' . $error;
     }
     return $error;
 }
@@ -173,7 +173,7 @@ function workspace_github_save_file($owner, $repo, $branch, $path, $content, $me
     $url = 'https://api.github.com/repos/' . rawurlencode($owner) . '/' . rawurlencode($repo)
         . '/contents/' . workspace_github_path($path);
     $body = [
-        'message' => $message ?: 'Initial commit from Libre Claude Coder',
+        'message' => $message ?: 'Initial commit from Nodalibre Coder',
         'content' => base64_encode((string)$content),
     ];
     if ($branch !== '') $body['branch'] = $branch ?: 'main';
@@ -218,7 +218,7 @@ function workspace_commit_files_via_contents($owner, $repo, $branch, $files, $me
             $branch,
             $path,
             (string)$file['content'],
-            $message ?: 'Update ' . $path . ' from Libre Claude Coder',
+            $message ?: 'Update ' . $path . ' from Nodalibre Coder',
             $token,
             $saveError,
             $sha
@@ -300,7 +300,7 @@ function workspace_commit_files($owner, $repo, $branch, $files, $message, $token
             $branch,
             $first['path'],
             $first['content'],
-            $message ?: 'Initial commit from Libre Claude Coder',
+            $message ?: 'Initial commit from Nodalibre Coder',
             $token,
             $error
         );
@@ -346,7 +346,7 @@ function workspace_commit_files($owner, $repo, $branch, $files, $message, $token
     if (!$tree || empty($tree['sha'])) return null;
 
     $commit = workspace_github_request('POST', $repoBase . '/git/commits', $token, [
-        'message' => $message ?: 'Update files from Libre Claude Coder',
+        'message' => $message ?: 'Update files from Nodalibre Coder',
         'tree' => $tree['sha'],
         'parents' => $parentSha !== '' ? [$parentSha] : [],
     ], $error);
@@ -401,9 +401,9 @@ function workspace_generate_files($prompt, $contextFiles, $tree, $user, &$raw, &
         $context .= "\n\n--- FILE: " . ($file['path'] ?? 'unknown') . " ---\n" . $content;
     }
 
-    $client = getClaudeClient($user['mistral_api_key'] ?? null);
+    $client = getMistralClient($user['mistral_api_key'] ?? null);
     $result = $client->chat([
-        ['role' => 'system', 'content' => 'Tu es Libre Claude Coder. Retourne uniquement un JSON valide: [{"path":"...","content":"..."}].'],
+        ['role' => 'system', 'content' => 'Tu es Nodalibre Coder. Retourne uniquement un JSON valide: [{"path":"...","content":"..."}].'],
         ['role' => 'user', 'content' => "Arborescence:\n" . implode("\n", $treeLines) . "\n\nContexte:" . ($context ?: "\nAucun fichier complet fourni.") . "\n\nDemande:\n" . $prompt],
     ], defined('CODE_AGENT_MODEL') ? CODE_AGENT_MODEL : 'codestral-latest', [
         'temperature' => 0.25,

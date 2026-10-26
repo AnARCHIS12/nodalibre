@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 260" role="img" aria-labelledby="title desc">
+  <title id="title">Nodalibre</title>
+  <desc id="desc">Logo Nodalibre pour fond clair</desc>
+  <g transform="translate(12 11) scale(.465)">
+    <g fill="none" stroke="#f20d38" stroke-width="44" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M146 144 246 88 350 153"/><path d="M371 191 374 305 287 371"/><path d="M242 393 140 340 118 232"/>
+    </g>
+    <g fill="#f20d38">
+      <circle cx="119" cy="161" r="55"/><circle cx="265" cy="78" r="55"/><circle cx="389" cy="173" r="55"/>
+      <circle cx="375" cy="337" r="55"/><circle cx="258" cy="407" r="55"/><circle cx="123" cy="346" r="55"/>
+    </g>
+  </g>
+  <text x="267" y="174" fill="#111118" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="122" font-weight="720" letter-spacing="-5">Nodalibre</text>
+</svg>

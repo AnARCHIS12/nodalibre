@@ -1,6 +1,6 @@
 <?php
 /**
- * Libre Claude - Connexion
+ * Nodalibre - Connexion
  */
 require_once dirname(__FILE__) . '/config.php';
 require_once dirname(__FILE__) . '/auth.php';
@@ -43,8 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><?= htmlspecialchars($t('login')) ?> — Libre Claude</title>
-<link rel="icon" href="libre-claude-icon.png" type="image/png">
+<title><?= htmlspecialchars($t('login')) ?> — Nodalibre</title>
+<link rel="icon" href="nodalibre-icon.png" type="image/png">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0a0a0f;--card:#13131a;--border:#1e1e2e;--text:#e8e6f0;--muted:#6b6880;--accent:#e6122a;--accent2:#ff3b4f;--err:#f87171;--success:#4ade80}
@@ -75,7 +75,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <body>
 <div class="card">
   <div class="brand">
-    <img class="brand-logo" src="libre-claude-red-black-dark.png" alt="Libre Claude">
+    <img class="brand-logo" src="nodalibre-logo-dark.png" alt="Nodalibre">
     <div class="brand-sub"><?= htmlspecialchars($t('app_subtitle')) ?></div>
   </div>
 

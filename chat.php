@@ -1,13 +1,13 @@
 <?php
 /**
- * Libre Claude - API Chat (Hostinger compatible)
+ * Nodalibre - API Chat (Hostinger compatible)
  * Endpoint: /chat.php (POST JSON)
  */
 
 require_once dirname(__FILE__) . '/config.php';
 require_once dirname(__FILE__) . '/database.php';
 require_once dirname(__FILE__) . '/auth.php';
-require_once dirname(__FILE__) . '/claude.php';
+require_once dirname(__FILE__) . '/mistral.php';
 require_once dirname(__FILE__) . '/memory.php';
 
 header('Content-Type: application/json; charset=utf-8');
@@ -75,15 +75,15 @@ try {
     $user   = $bearer ? $auth->getUserByApiToken($bearer) : $auth->getCurrentUser();
     if ($bearer && !$user) {
         http_response_code(401);
-        echo json_encode(['success' => false, 'error' => 'Clé API Libre Claude invalide']);
+        echo json_encode(['success' => false, 'error' => 'Clé API Nodalibre invalide']);
         exit;
     }
     $userId = $user ? (int)$user['id'] : null;
     $apiKey = $user ? ($user['mistral_api_key'] ?: null) : null;
 
-    $claude = getClaudeClient($apiKey);
+    $mistral = getMistralClient($apiKey);
 
-    // Créer ou récupérer la conversation, y compris pour les appels API internes lc_sk_...
+    // Créer ou récupérer la conversation, y compris pour les appels API internes.
     if (!$convId && $userId && $useHistory) {
         $convId = $db->insert('conversations', [
             'user_id'    => $userId,
@@ -117,7 +117,7 @@ try {
 
     // Système prompt
     $memoryContext = $userId ? memory_build_context($db, $user) : '';
-    $systemPrompt = "Tu es Libre Claude, un assistant IA avancé basé sur Mistral AI. Tu es intelligent, précis, créatif et bienveillant. Tu réponds toujours en français sauf si l'utilisateur parle une autre langue. Tu peux coder, analyser, créer et planifier des tâches complexes.";
+    $systemPrompt = "Tu es Nodalibre, un assistant IA avancé basé sur Mistral AI. Tu es intelligent, précis, créatif et bienveillant. Tu réponds toujours en français sauf si l'utilisateur parle une autre langue. Tu peux coder, analyser, créer et planifier des tâches complexes.";
     if ($useWebSearch) {
         $systemPrompt .= " Quand la recherche web est activée, utilise l'outil web_search pour vérifier les informations récentes, cite les sources pertinentes et signale clairement si les résultats ne permettent pas de conclure.";
     }
@@ -167,9 +167,9 @@ try {
     }
 
     // Si l'utilisateur demande une image dans le chat, router vers l'agent image
-    if (!$useWebSearch && $claude->isImagePrompt($message)) {
+    if (!$useWebSearch && $mistral->isImagePrompt($message)) {
         try {
-            $imgResult = $claude->generateImage($message);
+            $imgResult = $mistral->generateImage($message);
             if (!empty($imgResult['success'])) {
                 // Sauvegarder les images sur disque pour l historique
                 $dbContent = '';
@@ -212,7 +212,7 @@ try {
                 exit;
             }
         } catch (Exception $e) {
-            libreclaude_log("Auto-image generation failed: " . $e->getMessage(), 2);
+            nodalibre_log("Auto-image generation failed: " . $e->getMessage(), 2);
         }
     }
 
@@ -232,12 +232,12 @@ try {
             'content' => $message,
         ];
 
-        $result = $claude->chatWithWebSearch($webInputs, $model, [
+        $result = $mistral->chatWithWebSearch($webInputs, $model, [
             'temperature' => 0.3,
             'web_search_tool' => MISTRAL_WEB_SEARCH_TOOL,
         ]);
     } else {
-        $result = $claude->chat($apiMessages, $model, [
+        $result = $mistral->chat($apiMessages, $model, [
             'temperature' => 0.7,
             'max_tokens'  => 4096,
         ]);
@@ -271,7 +271,7 @@ try {
             'usage'           => $result['usage'] ?? [],
         ]);
     } else {
-        libreclaude_log("Chat error for user $userId: " . $result['error'], 2);
+        nodalibre_log("Chat error for user $userId: " . $result['error'], 2);
         echo json_encode([
             'success' => false,
             'error'   => $result['error'] ?? 'Erreur de l\'API Mistral',
@@ -279,6 +279,6 @@ try {
     }
 
 } catch (Exception $e) {
-    libreclaude_log("Chat exception: " . $e->getMessage(), 1);
+    nodalibre_log("Chat exception: " . $e->getMessage(), 1);
     echo json_encode(['success' => false, 'error' => 'Erreur interne du serveur']);
 }

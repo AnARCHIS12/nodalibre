@@ -1,6 +1,6 @@
 <?php
 /**
- * Libre Claude - Base de Données SQLite (Hostinger Compatible)
+ * Nodalibre - Base de Données SQLite (Hostinger Compatible)
  */
 
 require_once dirname(__FILE__) . '/config.php';
@@ -31,7 +31,7 @@ class Database {
             }
             $this->initTables();
         } catch (PDOException $e) {
-            libreclaude_log("DB error: " . $e->getMessage(), 1);
+            nodalibre_log("DB error: " . $e->getMessage(), 1);
             throw $e;
         }
     }
@@ -164,6 +164,19 @@ class Database {
         foreach (explode(';', $sql) as $q) {
             $q = trim($q);
             if ($q) $this->pdo->exec($q);
+        }
+
+        // Mettre à jour le nom d'instance par défaut lors du premier démarrage
+        // après migration, sans écraser un nom personnalisé par l'administrateur.
+        $legacySuffix = $GLOBALS['legacyBrandSuffix'] ?? '';
+        if ($legacySuffix !== '') {
+            $legacyDefaultName = 'Libre ' . ucfirst($legacySuffix);
+            $stmt = $this->pdo->prepare(
+                "UPDATE app_settings
+                 SET value = 'Nodalibre', updated_at = datetime('now')
+                 WHERE key = 'instance_name' AND lower(value) = lower(?)"
+            );
+            $stmt->execute([$legacyDefaultName]);
         }
     }
 

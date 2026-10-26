@@ -1,6 +1,6 @@
 <?php
 /**
- * Libre Claude - Authentification (Hostinger compatible)
+ * Nodalibre - Authentification (Hostinger compatible)
  */
 
 require_once dirname(__FILE__) . '/database.php';
@@ -34,10 +34,10 @@ class Auth {
                 'email'         => $email,
                 'password_hash' => password_hash($password, PASSWORD_DEFAULT),
             ]);
-            libreclaude_log("New user registered: $username (id=$userId)", 3);
+            nodalibre_log("New user registered: $username (id=$userId)", 3);
             return ['success' => true, 'user_id' => $userId];
         } catch (Exception $e) {
-            libreclaude_log("Register error: " . $e->getMessage(), 1);
+            nodalibre_log("Register error: " . $e->getMessage(), 1);
             return ['success' => false, 'error' => 'Erreur lors de l\'inscription'];
         }
     }
@@ -94,7 +94,7 @@ class Auth {
         $_SESSION['session_token'] = $token;
         $_SESSION['username']      = $user['username'];
 
-        libreclaude_log("User logged in: {$user['username']}", 3);
+        nodalibre_log("User logged in: {$user['username']}", 3);
         return ['success' => true, 'user' => $user];
     }
 
@@ -129,7 +129,9 @@ class Auth {
     }
 
     public function getUserByApiToken($token) {
-        if (!preg_match('/^lc_sk_[A-Fa-f0-9]{64}$/', $token)) return null;
+        // nd_sk_ est le format courant ; l'ancien préfixe reste accepté pour
+        // les jetons déjà distribués, dont seul le hash est stocké en base.
+        if (!preg_match('/^(?:nd|lc)_sk_[A-Fa-f0-9]{64}$/', $token)) return null;
 
         $hash = hash('sha256', $token);
         $row = $this->db->fetch(

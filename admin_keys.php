@@ -1,6 +1,6 @@
 <?php
 /**
- * Libre Claude - Administration des clés Claude serveur
+ * Nodalibre - Administration des clés Mistral serveur
  */
 require_once dirname(__FILE__) . '/config.php';
 require_once dirname(__FILE__) . '/auth.php';
@@ -58,7 +58,7 @@ function load_mistral_keys($db) {
             }
         } elseif (is_array($item) && trim($item['key'] ?? '') !== '') {
             $item['id'] = $item['id'] ?? bin2hex(random_bytes(6));
-            $item['name'] = trim($item['name'] ?? 'Clé Claude');
+            $item['name'] = trim($item['name'] ?? 'Clé Mistral');
             $item['active'] = (bool)($item['active'] ?? true);
             $item['status'] = $item['status'] ?? 'non testée';
             $item['last_tested_at'] = $item['last_tested_at'] ?? null;
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $name = trim($_POST['name'] ?? 'Production');
         $key  = trim($_POST['api_key'] ?? '');
         if ($key === '') {
-            $error = $t('paste_claude_key_error');
+            $error = $t('paste_provider_key_error');
         } else {
             $keys[] = [
                 'id' => bin2hex(random_bytes(6)),
@@ -158,8 +158,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><?= htmlspecialchars($t('server_keys_title')) ?> — Libre Claude</title>
-<link rel="icon" href="libre-claude-icon.png" type="image/png">
+<title><?= htmlspecialchars($t('server_keys_title')) ?> — Nodalibre</title>
+<link rel="icon" href="nodalibre-icon.png" type="image/png">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0a0a0f;--card:#13131a;--border:#1e1e2e;--text:#e8e6f0;--muted:#6b6880;--accent:#e6122a;--accent2:#ff3b4f;--err:#f87171;--success:#4ade80}
@@ -200,7 +200,7 @@ input:focus{outline:none;border-color:var(--accent)}
 <body>
 <div class="wrap">
   <div class="top">
-    <img class="logo" src="libre-claude-red-black-dark.png" alt="Libre Claude">
+    <img class="logo" src="nodalibre-logo-dark.png" alt="Nodalibre">
     <a class="back" href="index.php"><?= htmlspecialchars($t('back_chat')) ?></a>
   </div>
 

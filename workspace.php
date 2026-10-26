@@ -1,12 +1,12 @@
 <?php
 /**
- * Libre Claude - Workspace et GitHub
+ * Nodalibre - Workspace et GitHub
  */
 require_once dirname(__FILE__) . '/config.php';
 require_once dirname(__FILE__) . '/auth.php';
 require_once dirname(__FILE__) . '/database.php';
 require_once dirname(__FILE__) . '/i18n.php';
-require_once dirname(__FILE__) . '/claude.php';
+require_once dirname(__FILE__) . '/mistral.php';
 require_once dirname(__FILE__) . '/ui_confirm.php';
 
 $db = Database::getInstance();
@@ -54,7 +54,7 @@ function parse_github_repo($value) {
 function github_api_request($method, $url, $token, $body = null, &$error = '') {
     $headers = [
         'Accept: application/vnd.github+json',
-        'User-Agent: Libre-Claude-Workspace',
+        'User-Agent: Nodalibre-Workspace',
     ];
     if ($token) $headers[] = 'Authorization: Bearer ' . $token;
     if ($body !== null) $headers[] = 'Content-Type: application/json';
@@ -211,7 +211,7 @@ function github_commit_files_via_contents($owner, $repo, $branch, $files, $messa
             $branch,
             $path,
             (string)$file['content'],
-            $message ?: 'Update ' . $path . ' from Libre Claude',
+            $message ?: 'Update ' . $path . ' from Nodalibre',
             $sha,
             $token,
             $saveError
@@ -249,7 +249,7 @@ function github_create_repo_error_message($apiError, $t) {
 
 function github_publish_error_message($apiError, $t) {
     if (stripos($apiError, 'Resource not accessible by integration') !== false) {
-        return $t('multi_file_error') . ' GitHub refuse l écriture avec ce jeton. Dans votre GitHub App, activez Repository permissions > Contents: Read and write, vérifiez que l app est installée sur ce dépôt, puis reconnectez GitHub dans Libre Claude. ' . $apiError;
+        return $t('multi_file_error') . ' GitHub refuse l écriture avec ce jeton. Dans votre GitHub App, activez Repository permissions > Contents: Read and write, vérifiez que l app est installée sur ce dépôt, puis reconnectez GitHub dans Nodalibre. ' . $apiError;
     }
     return $t('multi_file_error') . ' ' . $apiError;
 }
@@ -359,13 +359,13 @@ function workspace_ai_code($instruction, $contextFiles, $repoFiles, $user, &$raw
         $context .= "\n\n--- FILE: " . ($file['path'] ?? 'unknown') . " ---\n" . $content;
     }
 
-    $system = "Tu es Libre Claude Coder, un agent de code integre a Libre Claude. Tu modifies un depot GitHub en proposant des fichiers complets ou nouveaux fichiers. Reponds uniquement avec un JSON valide, sans markdown, sous forme de tableau. Chaque entree doit avoir exactement: path, content. N'invente pas de fichiers inutiles. Respecte la demande utilisateur.";
+    $system = "Tu es Nodalibre Coder, un agent de code integre a Nodalibre. Tu modifies un depot GitHub en proposant des fichiers complets ou nouveaux fichiers. Reponds uniquement avec un JSON valide, sans markdown, sous forme de tableau. Chaque entree doit avoir exactement: path, content. N'invente pas de fichiers inutiles. Respecte la demande utilisateur.";
     $userPrompt = "Depot connecte. Arborescence disponible:\n" . implode("\n", $treeLines)
         . "\n\nFichiers fournis en contexte:" . ($context ?: "\nAucun fichier complet fourni.")
         . "\n\nDemande utilisateur:\n" . $instruction
         . "\n\nRetour attendu: JSON array strict [{\"path\":\"...\",\"content\":\"...\"}].";
 
-    $client = getClaudeClient($user['mistral_api_key'] ?? null);
+    $client = getMistralClient($user['mistral_api_key'] ?? null);
     $result = $client->chat([
         ['role' => 'system', 'content' => $system],
         ['role' => 'user', 'content' => $userPrompt],
@@ -445,7 +445,7 @@ function github_commit_files($owner, $repo, $branch, $files, $message, $token, &
             $branch,
             $first['path'],
             $first['content'],
-            $message ?: 'Initial commit from Libre Claude',
+            $message ?: 'Initial commit from Nodalibre',
             $token,
             $error
         );
@@ -484,7 +484,7 @@ function github_commit_files($owner, $repo, $branch, $files, $message, $token, &
     if (!$tree || empty($tree['sha'])) return null;
 
     $commitBody = [
-        'message' => $message ?: 'Update files from Libre Claude',
+        'message' => $message ?: 'Update files from Nodalibre',
         'tree' => $tree['sha'],
         'parents' => $parentSha !== '' ? [$parentSha] : [],
     ];
@@ -731,8 +731,8 @@ $aiBubbleReply = workspace_coder_bubble_reply($aiFilesDraft, $aiCodeReply, $t);
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><?= htmlspecialchars($t('workspace_title')) ?> - Libre Claude</title>
-<link rel="icon" href="libre-claude-icon.png" type="image/png">
+<title><?= htmlspecialchars($t('workspace_title')) ?> - Nodalibre</title>
+<link rel="icon" href="nodalibre-icon.png" type="image/png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -921,7 +921,7 @@ select,.branch-input,input,textarea{background:#0d0d15;color:var(--text);border-
 <div class="app">
   <aside class="side">
     <div class="side-top">
-      <img class="mark" src="libre-claude-icon.png" alt="Libre Claude">
+      <img class="mark" src="nodalibre-icon.png" alt="Nodalibre">
       <button class="side-toggle" type="button" aria-label="Réduire la barre" onclick="toggleWorkspaceSidebar()"><i class="fa-solid fa-table-columns"></i></button>
     </div>
     <div class="side-section">
@@ -1110,7 +1110,7 @@ select,.branch-input,input,textarea{background:#0d0d15;color:var(--text);border-
         <form method="POST">
           <input type="hidden" name="action" value="create_repo">
           <label><?= htmlspecialchars($t('repo_name')) ?></label>
-          <input name="repo_name" placeholder="libre-claude-app">
+          <input name="repo_name" placeholder="nodalibre-app">
           <label><?= htmlspecialchars($t('repo_description')) ?></label>
           <input name="repo_description" placeholder="<?= htmlspecialchars($t('repo_description_placeholder')) ?>">
           <label><?= htmlspecialchars($t('github_create_token')) ?></label>
@@ -1345,7 +1345,7 @@ function previewErrorOverlayScript() {
       box.style.cssText = 'position:fixed;left:12px;right:12px;bottom:12px;z-index:999999;margin:0;padding:12px 14px;border-radius:10px;background:#1a1115;color:#ffdce2;border:1px solid #e6122a;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;max-height:45vh;overflow:auto';
       document.body.appendChild(box);
     }
-    box.textContent = 'Erreur aperçu Libre Claude:\\n' + String(message || 'Erreur inconnue');
+    box.textContent = 'Erreur aperçu Nodalibre:\\n' + String(message || 'Erreur inconnue');
   };
   window.addEventListener('error', event => show(event.message || event.error));
   window.addEventListener('unhandledrejection', event => show(event.reason && (event.reason.stack || event.reason.message) || event.reason));
@@ -1502,11 +1502,11 @@ function toggleWorkspaceSidebar() {
   if (!app) return;
   app.classList.toggle('sidebar-collapsed');
   try {
-    localStorage.setItem('libreClaudeWorkspaceSidebar', app.classList.contains('sidebar-collapsed') ? 'collapsed' : 'open');
+    localStorage.setItem('nodalibreWorkspaceSidebar', app.classList.contains('sidebar-collapsed') ? 'collapsed' : 'open');
   } catch (e) {}
 }
 try {
-  if (localStorage.getItem('libreClaudeWorkspaceSidebar') === 'collapsed') {
+  if (localStorage.getItem('nodalibreWorkspaceSidebar') === 'collapsed') {
     document.querySelector('.app')?.classList.add('sidebar-collapsed');
   }
 } catch (e) {}
@@ -1556,7 +1556,7 @@ function formatGeneratedDiff(file) {
     'diff --git a/' + file.path + ' b/' + file.path,
     '--- a/' + file.path,
     '+++ b/' + file.path,
-    '@@ generated by Libre Claude Coder @@',
+    '@@ generated by Nodalibre Coder @@',
   ];
   return header.concat(lines.map(line => '+ ' + line));
 }
@@ -1742,7 +1742,7 @@ function showCodingStarted() {
       <div class="coder-turn">
         <div class="coder-work-label">Coding <span>en cours</span></div>
         <div class="coder-bubble assistant">
-          <span class="coder-pending"><i class="fa-solid fa-circle-notch fa-spin"></i> Libre Claude prépare les modifications...</span>
+          <span class="coder-pending"><i class="fa-solid fa-circle-notch fa-spin"></i> Nodalibre prépare les modifications...</span>
         </div>
       </div>
     `;

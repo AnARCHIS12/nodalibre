@@ -1,35 +1,38 @@
 <p align="center">
-  <img src="libre-claude-red-black-dark.png" alt="Libre Claude" width="520">
+  <img src="nodalibre-logo-dark.png" alt="Nodalibre" width="520">
 </p>
 
 <p align="center">
-  <strong>Assistant IA libre, auto-hébergeable, en PHP + SQLite, avec une interface type Claude Code.</strong>
+  <strong>Assistant IA libre, auto-hébergeable et conçu pour plusieurs fournisseurs.</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/AnARCHIS12/Libre-claude/releases/tag/v1.3.1"><img alt="Release v1.3.1" src="https://img.shields.io/badge/Release-v1.3.1-e6122a?style=for-the-badge&logo=github&logoColor=white"></a>
+  <a href="https://github.com/AnARCHIS12/Nodalibre/releases/tag/v1.3.1"><img alt="Release v1.3.1" src="https://img.shields.io/badge/Release-v1.3.1-e6122a?style=for-the-badge&logo=github&logoColor=white"></a>
   <img alt="PHP" src="https://img.shields.io/badge/PHP-8.3%2B-777BB4?style=for-the-badge&logo=php&logoColor=white">
   <img alt="SQLite" src="https://img.shields.io/badge/SQLite-local-003B57?style=for-the-badge&logo=sqlite&logoColor=white">
-  <img alt="Claude AI" src="https://img.shields.io/badge/Claude AI-e6122a?style=for-the-badge">
-  <img alt="Docker" src="https://img.shields.io/docker/v/liberchat/libre-claude?sort=semver&style=for-the-badge&logo=docker&label=Docker">
-  <img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/liberchat/libre-claude?style=for-the-badge&logo=docker&logoColor=white">
+  <img alt="Mistral AI" src="https://img.shields.io/badge/Mistral AI-e6122a?style=for-the-badge">
+  <img alt="Docker" src="https://img.shields.io/docker/v/liberchat/nodalibre?sort=semver&style=for-the-badge&logo=docker&label=Docker">
+  <img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/liberchat/nodalibre?style=for-the-badge&logo=docker&logoColor=white">
   <img alt="Langues" src="https://img.shields.io/badge/FR%20EN%20ES%20DE%20IT-multilingue-e6122a?style=for-the-badge">
   <img alt="Licence MIT" src="https://img.shields.io/badge/Licence-MIT-e6122a?style=for-the-badge">
 </p>
 
 <p align="center">
-  
+  <em>Projet indépendant, non affilié, sponsorisé ou approuvé par un fournisseur de modèles d'IA.</em>
+</p>
+
+> [!IMPORTANT]
+> Le projet change de nom et d'identité visuelle à partir de cette version.
+> Les installations existantes sont migrées automatiquement ; consultez la
+> section « Migration du nom » avant de mettre à jour un déploiement Docker.
+
 ---
 
 ## Aperçu
 
-**Libre Claude** est une interface conversationnelle web inspirée des assistants IA modernes, conçue pour tourner sur un hébergement mutualisé type Hostinger ou en conteneur Docker.
+**Nodalibre** est une interface conversationnelle web inspirée des assistants IA modernes, conçue pour tourner sur un hébergement mutualisé type Hostinger ou en conteneur Docker.
 
-Le projet utilise PHP pur, SQLite, cURL et des modèles affichés dans l'interface comme des modèles Claude. Il inclut une installation initiale, une authentification, un historique de conversations, une rotation des clés API et une interface responsive rouge/noir.
-
-<p align="center">
-  <img src="home.png" alt="Aperçu de l'interface Libre Claude" width="920">
-</p>
+Le projet utilise PHP pur, SQLite, cURL et l'API Mistral. Il inclut une installation initiale, une authentification, un historique de conversations, une rotation des clés API et une interface responsive rouge/noir.
 
 ## Fonctionnalités
 
@@ -39,14 +42,14 @@ Le projet utilise PHP pur, SQLite, cURL et des modèles affichés dans l'interfa
 - Authentification avec mots de passe hashes.
 - Sessions stockées en base SQLite.
 - Conversations et messages persistants par utilisateur.
-- **Nouvelle génération Claude 5 & 4.5** : Claude Sonnet 5, Claude Sonnet 4.5, Claude Haiku 4.5, Claude Code Max, 100% compatibles Free Tier sans erreurs 403.
+- Catalogue Mistral actuel : Mistral Large 4, Medium 3.5, Small 4, Ministral 3 et Codestral.
 - Rotation automatique des clés API partagées.
 - Clé API personnelle configurable par utilisateur.
-- Pool de clés Claude serveur administrable depuis l'interface.
-- Clés API internes Libre Claude (`lc_sk_...`) pour intégrer vos propres scripts.
+- Pool de clés Mistral serveur administrable depuis l'interface.
+- Clés API internes Nodalibre (`nd_sk_...`) pour intégrer vos propres scripts.
 - **Recherche dans l'historique** : recherche instantanée dans les titres et le contenu des messages.
 - **Export de conversations** : export en Markdown ou JSON pour sauvegarder et partager vos discussions.
-- Dictée vocale avec Voxtral (`voxtral-small-latest`) depuis le champ de message.
+- Dictée vocale avec Voxtral Mini Transcribe 3 depuis le champ de message.
 - Discussion vocale avec réponse audio Mistral ou voix locale du navigateur en fallback.
 - Recherche web avec routage automatique vers les modèles compatibles connecteurs.
 - Analyse OCR avec **fallback automatique Vision Multimodale** en cas de limite de quota sur `/v1/ocr`.
@@ -66,33 +69,31 @@ Le projet utilise PHP pur, SQLite, cURL et des modèles affichés dans l'interfa
 
 ## Capacités IA
 
-Libre Claude regroupe plusieurs fonctions dans une seule interface :
+Nodalibre regroupe plusieurs fonctions dans une seule interface :
 
 | Fonction | Interface | Backend |
 | --- | --- | --- |
-| Chat texte | Champ principal | Chat completions Mistral (`codestral-latest` par défaut) |
+| Chat texte | Champ principal | Chat completions Mistral (`mistral-small-latest` par défaut) |
 | Recherche web | Bouton globe | Conversations API avec connecteur web (`mistral-small-latest`) |
-| Dictée vocale | Bouton micro | Voxtral transcription (`voxtral-small-latest`) |
+| Dictée vocale | Bouton micro | Voxtral transcription (`voxtral-mini-transcribe-3`) |
 | Discussion vocale | Bouton téléphone | Transcription + réponse audio |
 | OCR / documents | Bouton fichier | `mistral-ocr-latest` + Fallback Vision Multimodale (`ministral-14b-latest`) |
 | Génération d'images | Bouton baguette ou demande dans le chat | Agent Mistral + `image_generation` |
 
-### Modèles supportés (Génération Claude 5 & 4.5)
+### Modèles Mistral supportés
 
-Tous les modèles intégrés sont **100% compatibles avec les clés gratuites (Free Tier)** :
+La disponibilité et la facturation dépendent du niveau du compte Mistral utilisé :
 
 | Modèle affiché | ID Technique | Description |
 | --- | --- | --- |
-| **Claude Sonnet 5** ⭐ *(Défaut)* | `codestral-latest` | Raisonnement de pointe, logique complexe et code ultra-rapide |
-| **Claude Sonnet 4.5** | `ministral-14b-latest` | Modèle multimodal 14B : texte, images, vision et documents |
-| **Claude Haiku 4.5** | `ministral-8b-latest` | Modèle rapide et polyvalent avec support vision |
-| **Claude Haiku Mini** | `ministral-3b-latest` | Modèle ultra-léger et économique pour réponses instantanées |
-| **Claude Code Max** | `codestral-2508` | Spécialisé code & architecture pour le Workspace GitHub |
-| **Claude Code Sonnet** | `mistral-code-latest` | Génération et refactorisation de code |
-| **Claude Code Haiku** | `mistral-code-fim-latest` | Complétion de code ultra-rapide (Fill-in-the-Middle) |
-| **Claude Vision 5** | `ministral-14b-2512` | Analyse visuelle avancée, diagrammes et OCR complexe |
-| **Claude Vision Lite** | `ministral-8b-2512` | Analyse visuelle rapide et légère |
-| **Claude Audio Haiku** | `voxtral-small-latest` | Transcription audio et dictée vocale |
+| **Mistral Large 4** | `mistral-large-4` | Généraliste multimodal, contexte 1M, Public Preview |
+| **Mistral Medium 3.5** | `mistral-medium-latest` | Raisonnement, agents et code |
+| **Mistral Small 4** ⭐ *(Défaut)* | `mistral-small-latest` | Modèle rapide et multimodal |
+| **Ministral 3 14B** | `ministral-14b-latest` | Modèle multimodal équilibré |
+| **Ministral 3 8B** | `ministral-8b-latest` | Modèle multimodal léger |
+| **Ministral 3 3B** | `ministral-3b-latest` | Modèle multimodal compact |
+| **Codestral** | `codestral-latest` | Génération et complétion de code |
+| **Codestral 25.08** | `codestral-2508` | Version épinglée de Codestral |
 
 Pour générer une image, vous pouvez cliquer sur le bouton baguette ou écrire directement dans le chat :
 
@@ -100,7 +101,7 @@ Pour générer une image, vous pouvez cliquer sur le bouton baguette ou écrire 
 génère un chat anarchiste en affiche rouge et noir
 ```
 
-Libre Claude détecte les demandes d'image courantes (`génère une image`, `dessine`, `crée une affiche`, etc.) et les route vers l'agent image au lieu du chat texte.
+Nodalibre détecte les demandes d'image courantes (`génère une image`, `dessine`, `crée une affiche`, etc.) et les route vers l'agent image au lieu du chat texte.
 
 > La génération d'images dépend de l'accès de votre compte Mistral aux Agents et à l'outil `image_generation`. Si votre compte n'y a pas accès, l'interface affichera l'erreur retournée par Mistral.
 
@@ -108,7 +109,7 @@ Libre Claude détecte les demandes d'image courantes (`génère une image`, `des
 
 | Logo sombre | Logo clair | Icône |
 | --- | --- | --- |
-| <img src="libre-claude-red-black-dark.png" alt="Logo sombre Libre Claude" width="260"> | <img src="libre-claude-red-black.png" alt="Logo clair Libre Claude" width="260"> | <img src="libre-claude-icon.png" alt="Icône Libre Claude" width="96"> |
+| <img src="nodalibre-logo-dark.png" alt="Logo sombre Nodalibre" width="260"> | <img src="nodalibre-logo-light.png" alt="Logo clair Nodalibre" width="260"> | <img src="nodalibre-icon.png" alt="Icône Nodalibre" width="96"> |
 
 ## Prérequis
 
@@ -116,37 +117,37 @@ Libre Claude détecte les demandes d'image courantes (`génère une image`, `des
 - Extension PHP `pdo_sqlite`.
 - Extension PHP `curl`.
 - Un serveur Apache ou compatible PHP.
-- Une ou plusieurs clés API Claude.
+- Une ou plusieurs clés API Mistral.
 
 ## Installation
 
 1. Envoyez tous les fichiers dans le dossier web de votre hébergement, par exemple `public_html/`.
 2. Vérifiez que PHP peut créer les dossiers `data/` et `sandbox/`.
 3. Ouvrez votre domaine dans le navigateur.
-4. Si aucun compte n'existe, Libre Claude redirige automatiquement vers `setup.php`.
-5. Créez le compte administrateur et ajoutez les clés Claude partagées si besoin.
+4. Si aucun compte n'existe, Nodalibre redirige automatiquement vers `setup.php`.
+5. Créez le compte administrateur et ajoutez les clés Mistral partagées si besoin.
 6. Connectez-vous et commencez une conversation.
 
 ## Installation Docker
 
-Libre Claude peut aussi tourner dans une image Docker Apache + PHP.
+Nodalibre peut aussi tourner dans une image Docker Apache + PHP.
 
 ### Installation one-line interactive
 
 Installation moderne depuis GitHub avec `curl` :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh
 ```
 
 Le script lance un assistant interactif :
 
 ```text
-Dossier d'installation [/home/user/libre-claude]:
+Dossier d'installation [/home/user/nodalibre]:
 Port web local [8173]:
-Image Docker [liberchat/libre-claude:latest]:
+Image Docker [liberchat/nodalibre:latest]:
 Configurer GitHub OAuth maintenant ? [o/N]
-Lancer Libre Claude après l'installation ? [O/n]
+Lancer Nodalibre après l'installation ? [O/n]
 Continuer ? [O/n]
 ```
 
@@ -159,53 +160,53 @@ Si Docker est absent, l'installateur propose de l'installer automatiquement :
 Version avec URL GitHub classique :
 
 ```bash
-curl -fsSL https://github.com/AnARCHIS12/Libre-claude/raw/main/install.sh | sh
+curl -fsSL https://github.com/AnARCHIS12/Nodalibre/raw/main/install.sh | sh
 ```
 
 Afficher l'aide :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | sh -s -- --help
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh -s -- --help
 ```
 
 Changer le port sans passer par les questions :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | sh -s -- --port 8080
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh -s -- --port 8080
 ```
 
 Installer dans un dossier précis :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | sh -s -- --dir /opt/libre-claude
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh -s -- --dir /opt/nodalibre
 ```
 
 Installation automatique sans interaction :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | \
-  LIBRE_CLAUDE_YES=1 \
-  LIBRE_CLAUDE_PORT=8080 \
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | \
+  NODALIBRE_YES=1 \
+  NODALIBRE_PORT=8080 \
   sh
 ```
 
 Préparer les fichiers sans démarrer Docker :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | sh -s -- --no-start
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh -s -- --no-start
 ```
 
 Refuser l'installation automatique de Docker :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | sh -s -- --no-install-docker
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | sh -s -- --no-install-docker
 ```
 
 Avec OAuth GitHub dès l'installation :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | \
-  LIBRE_CLAUDE_YES=1 \
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.sh | \
+  NODALIBRE_YES=1 \
   GITHUB_OAUTH_CLIENT_ID=votre_client_id \
   GITHUB_OAUTH_CLIENT_SECRET=votre_client_secret \
   GITHUB_OAUTH_SCOPE=repo \
@@ -217,17 +218,17 @@ curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/instal
 Depuis PowerShell, lancez l'installateur interactif Windows :
 
 ```powershell
-irm https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.ps1 | iex
 ```
 
 Le script demande :
 
 ```text
-Dossier d'installation [~\libre-claude]
+Dossier d'installation [~\nodalibre]
 Port web local [8173]
-Image Docker [liberchat/libre-claude:latest]
+Image Docker [liberchat/nodalibre:latest]
 Configurer GitHub OAuth maintenant ? [o/N]
-Lancer Libre Claude après l'installation ? [O/n]
+Lancer Nodalibre après l'installation ? [O/n]
 Continuer ? [O/n]
 ```
 
@@ -236,8 +237,8 @@ Si Docker Desktop ou WSL sont absents, le script configure automatiquement WSL 2
 Avec options, téléchargez puis lancez le script :
 
 ```powershell
-irm https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.ps1 -OutFile install.ps1
-powershell -ExecutionPolicy Bypass -File .\install.ps1 -Port 8080 -Dir "$env:USERPROFILE\LibreClaude"
+irm https://raw.githubusercontent.com/AnARCHIS12/Nodalibre/main/install.ps1 -OutFile install.ps1
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -Port 8080 -Dir "$env:USERPROFILE\Nodalibre"
 ```
 
 Installation automatique sans questions :
@@ -267,7 +268,7 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1 -DryRun -Yes
 Le script crée :
 
 ```text
-~/libre-claude/
+~/nodalibre/
 ├── docker-compose.yml
 ├── .env
 ├── data/
@@ -277,7 +278,7 @@ Le script crée :
 Puis il lance directement l'image :
 
 ```text
-liberchat/libre-claude:latest
+liberchat/nodalibre:latest
 ```
 
 ### Lancement rapide avec Docker Compose
@@ -295,11 +296,13 @@ PUBLIC_URL=https://votre-domaine.com
 GITHUB_OAUTH_CLIENT_ID=votre_client_id
 GITHUB_OAUTH_CLIENT_SECRET=votre_client_secret
 GITHUB_OAUTH_SCOPE=
+MISTRAL_API_KEYS=votre_cle_mistral
 MISTRAL_WEB_SEARCH_TOOL=web_search
 MISTRAL_OCR_MODEL=mistral-ocr-latest
+MISTRAL_TRANSCRIPTION_MODEL=voxtral-mini-transcribe-3
 MISTRAL_IMAGE_MODEL=mistral-medium-latest
 MISTRAL_IMAGE_AGENT_ID=
-MISTRAL_TTS_MODEL=voxtral-mini-tts-2603
+MISTRAL_TTS_MODEL=voxtral-mini-tts-3-0
 MISTRAL_TTS_VOICE_ID=
 ```
 
@@ -320,21 +323,21 @@ Les dossiers `data/` et `sandbox/` sont montés en volume local, donc la base SQ
 ### Build image Docker
 
 ```bash
-docker build -t libre-claude:local .
+docker build -t nodalibre:local .
 ```
 
 Lancer l'image :
 
 ```bash
 docker run -d \
-  --name libre-claude \
+  --name nodalibre \
   -p 8173:80 \
   -v "$PWD/data:/var/www/html/data" \
   -v "$PWD/sandbox:/var/www/html/sandbox" \
   -e PUBLIC_URL="https://votre-domaine.com" \
   -e GITHUB_OAUTH_CLIENT_ID="votre_client_id" \
   -e GITHUB_OAUTH_CLIENT_SECRET="votre_client_secret" \
-  libre-claude:local
+  nodalibre:local
 ```
 
 ### Push vers Docker Hub
@@ -343,33 +346,33 @@ Remplacez `votre-compte` par votre compte Docker Hub :
 
 ```bash
 docker login
-docker build -t votre-compte/libre-claude:latest .
-docker push votre-compte/libre-claude:latest
+docker build -t votre-compte/nodalibre:latest .
+docker push votre-compte/nodalibre:latest
 ```
 
 Build et push multi-architecture `linux/amd64` + `linux/arm64` :
 
 ```bash
 docker run --privileged --rm tonistiigi/binfmt --install arm64,amd64
-docker buildx create --name libre-claude-multi --driver docker-container --use --bootstrap
+docker buildx create --name nodalibre-multi --driver docker-container --use --bootstrap
 docker buildx build \
-  --builder libre-claude-multi \
+  --builder nodalibre-multi \
   --platform linux/amd64,linux/arm64 \
-  -t votre-compte/libre-claude:latest \
+  -t votre-compte/nodalibre:latest \
   --push .
 ```
 
 Vérifier les architectures publiées :
 
 ```bash
-docker buildx imagetools inspect votre-compte/libre-claude:latest
+docker buildx imagetools inspect votre-compte/nodalibre:latest
 ```
 
 Versionner une release :
 
 ```bash
-docker tag votre-compte/libre-claude:latest votre-compte/libre-claude:v1.3.1
-docker push votre-compte/libre-claude:v1.3.1
+docker tag votre-compte/nodalibre:latest votre-compte/nodalibre:v1.3.1
+docker push votre-compte/nodalibre:v1.3.1
 ```
 
 ### Déploiement production avec l'image publiée
@@ -377,7 +380,7 @@ docker push votre-compte/libre-claude:v1.3.1
 Le fichier `docker-compose.prod.yml` utilise directement l'image Docker Hub :
 
 ```yaml
-image: liberchat/libre-claude:latest
+image: liberchat/nodalibre:latest
 ```
 
 Lancer en production :
@@ -398,8 +401,8 @@ docker compose -f docker-compose.prod.yml up -d
 Les données SQLite et le sandbox sont persistés dans des volumes Docker nommés :
 
 ```text
-libre_claude_data
-libre_claude_sandbox
+nodalibre_data
+nodalibre_sandbox
 ```
 
 ### Push vers GitHub Container Registry
@@ -408,34 +411,30 @@ Connectez-vous à GHCR avec un token GitHub ayant le droit `write:packages` :
 
 ```bash
 echo "VOTRE_TOKEN_GITHUB" | docker login ghcr.io -u VOTRE_USER_GITHUB --password-stdin
-docker build -t ghcr.io/VOTRE_USER_GITHUB/libre-claude:latest .
-docker push ghcr.io/VOTRE_USER_GITHUB/libre-claude:latest
+docker build -t ghcr.io/VOTRE_USER_GITHUB/nodalibre:latest .
+docker push ghcr.io/VOTRE_USER_GITHUB/nodalibre:latest
 ```
 
 Lancer l'image GHCR :
 
 ```bash
 docker run -d \
-  --name libre-claude \
+  --name nodalibre \
   -p 8173:80 \
   -v "$PWD/data:/var/www/html/data" \
   -v "$PWD/sandbox:/var/www/html/sandbox" \
-  ghcr.io/VOTRE_USER_GITHUB/libre-claude:latest
+  ghcr.io/VOTRE_USER_GITHUB/nodalibre:latest
 ```
 
 ## Configuration
 
 Les constantes principales se trouvent dans `config.php`.
 
-```php
-define('DEFAULT_MISTRAL_API_KEYS', [
-    'votre_clé_1',
-    'votre_clé_2',
-    'votre_clé_3',
-]);
+```env
+MISTRAL_API_KEYS=votre_cle_1,votre_cle_2
 ```
 
-Les clés ajoutées dans `setup.php` sont stockées en base dans `app_settings` et sont utilisées en priorité. Si aucune clé n'est configurée dans l'instance, Libre Claude utilise `DEFAULT_MISTRAL_API_KEYS`.
+Les clés ajoutées dans `setup.php` sont stockées en base dans `app_settings` et sont utilisées en priorité. Si aucune clé n'est configurée dans l'instance, Nodalibre utilise `DEFAULT_MISTRAL_API_KEYS`.
 
 ### GitHub OAuth
 
@@ -451,7 +450,7 @@ Pour éviter de coller un token GitHub manuellement, créez une OAuth App GitHub
 6. Renseignez :
 
 ```text
-Application name: Libre Claude
+Application name: Nodalibre
 Homepage URL: http://127.0.0.1:8173
 Authorization callback URL: http://127.0.0.1:8173/github_oauth.php
 ```
@@ -492,17 +491,18 @@ GITHUB_OAUTH_SCOPE=
 
 `PUBLIC_URL` force l'URL publique utilisée pour OAuth. Elle est recommandée derrière un reverse proxy HTTPS, par exemple Dockhand, Traefik, Nginx Proxy Manager ou Cloudflare Tunnel.
 
-`GITHUB_OAUTH_SCOPE` peut rester vide. Libre Claude detecte les GitHub Apps dont le `Client ID` commence par `Iv` et n'envoie pas de scope, car leurs permissions sont gerees dans la GitHub App. Pour une OAuth App classique, utilisez `repo` si vous voulez acceder aux depots prives.
+`GITHUB_OAUTH_SCOPE` peut rester vide. Nodalibre detecte les GitHub Apps dont le `Client ID` commence par `Iv` et n'envoie pas de scope, car leurs permissions sont gerees dans la GitHub App. Pour une OAuth App classique, utilisez `repo` si vous voulez acceder aux depots prives.
 
 ### Variables Mistral optionnelles
 
 | Variable | Défaut | Usage |
 | --- | --- | --- |
+| `MISTRAL_API_KEYS` | vide | Clés Mistral serveur séparées par des virgules ou des retours à la ligne. |
 | `MISTRAL_WEB_SEARCH_TOOL` | `web_search` | Outil de recherche web utilisé par Conversations API. |
 | `MISTRAL_OCR_MODEL` | `mistral-ocr-latest` | Modèle OCR pour les images et documents. |
 | `MISTRAL_IMAGE_MODEL` | `mistral-medium-latest` | Modèle de l'agent qui pilote la génération d'image. |
-| `MISTRAL_IMAGE_AGENT_ID` | vide | Agent Mistral existant avec `image_generation`. Si vide, Libre Claude essaie d'en créer un automatiquement. |
-| `MISTRAL_TTS_MODEL` | `voxtral-mini-tts-2603` | Modèle de synthèse vocale. |
+| `MISTRAL_IMAGE_AGENT_ID` | vide | Agent Mistral existant avec `image_generation`. Si vide, Nodalibre essaie d'en créer un automatiquement. |
+| `MISTRAL_TTS_MODEL` | `voxtral-mini-tts-3-0` | Modèle de synthèse vocale. |
 | `MISTRAL_TTS_VOICE_ID` | vide | Voix Mistral à utiliser. Si vide ou indisponible, le navigateur peut lire la réponse en fallback. |
 
 Pour une production stable, créez un Agent Mistral avec l'outil `image_generation`, puis renseignez son identifiant dans `MISTRAL_IMAGE_AGENT_ID`.
@@ -513,7 +513,7 @@ Puis relancez :
 docker compose up -d --build
 ```
 
-Après ça, le bouton `Se connecter avec GitHub` apparaît dans le Workspace. L'utilisateur autorise Libre Claude, puis choisit un dépôt accessible.
+Après ça, le bouton `Se connecter avec GitHub` apparaît dans le Workspace. L'utilisateur autorise Nodalibre, puis choisit un dépôt accessible.
 
 ## Structure
 
@@ -525,8 +525,8 @@ votre-domaine.com/
 ├── register.php                      Inscription
 ├── logout.php                        Déconnexion
 ├── settings.php                      Paramètres utilisateur
-├── admin_keys.php                    Pool de clés Claude serveur
-├── api_tokens.php                    Clés API internes Libre Claude
+├── admin_keys.php                    Pool de clés Mistral serveur
+├── api_tokens.php                    Clés API internes Nodalibre
 ├── workspace.php                     Workspace code et connexion GitHub
 ├── workspace_api.php                 API de sauvegarde des blocs de code
 ├── chat.php                          API de chat
@@ -539,7 +539,7 @@ votre-domaine.com/
 ├── i18n.php                          Traductions multilingues
 ├── config.php                        Configuration globale
 ├── database.php                      Accès SQLite et schéma
-├── claude.php                        Client API Claude
+├── mistral.php                        Client API Mistral
 ├── github_oauth.php                  Callback OAuth GitHub
 ├── install.sh                        Installateur one-line curl
 ├── install.ps1                       Installateur Windows PowerShell
@@ -549,12 +549,15 @@ votre-domaine.com/
 ├── docker-compose.prod.yml           Lancement production avec image publiée
 ├── .env.example                      Variables Docker exemple
 ├── LICENSE                           Licence MIT
-├── libre-claude-red-black-dark.png   Logo sombre
-├── libre-claude-red-black.png        Logo clair
-├── libre-claude-icon.png             Icône / favicon
+├── nodalibre-logo-dark.svg        Logo sombre, source vectorielle
+├── nodalibre-logo-light.svg       Logo clair, source vectorielle
+├── nodalibre-logo-dark.png        Logo sombre
+├── nodalibre-logo-light.png       Logo clair
+├── nodalibre-icon.svg             Icône, source vectorielle
+├── nodalibre-icon.png             Icône / favicon
 └── data/
-    ├── libre_claude.sqlite           Base créée automatiquement
-    └── libre_claude.log              Logs applicatifs
+    ├── nodalibre.sqlite           Base créée automatiquement
+    └── nodalibre.log              Logs applicatifs
 ```
 
 ## Base de données
@@ -562,7 +565,7 @@ votre-domaine.com/
 La base SQLite est créée automatiquement au premier accès :
 
 ```text
-data/libre_claude.sqlite
+data/nodalibre.sqlite
 ```
 
 Tables principales :
@@ -574,32 +577,32 @@ Tables principales :
 - `app_settings`
 - `api_tokens`
 
-## Clés Claude et clés internes
+## Clés Mistral et clés internes
 
-Libre Claude sépare deux types de secrets :
+Nodalibre sépare deux types de secrets :
 
-- **Clés Claude serveur** : vraies clés Claude, visibles uniquement par l'admin dans `admin_keys.php`.
-- **Clés Libre Claude** : tokens internes générés dans `api_tokens.php`, au format `lc_sk_...`.
+- **Clés Mistral serveur** : clés du fournisseur, visibles uniquement par l'admin dans `admin_keys.php`.
+- **Clés Nodalibre** : tokens internes générés dans `api_tokens.php`, au format `nd_sk_...`.
 
-Les tokens internes permettent d'appeler votre interface comme une API sans partager la clé Claude réelle :
+Les tokens internes permettent d'appeler votre interface comme une API sans partager la clé Mistral réelle :
 
 ```bash
 curl https://votre-domaine.com/chat.php \
-  -H 'Authorization: Bearer lc_sk_votre_clé' \
+  -H 'Authorization: Bearer nd_sk_votre_clé' \
   -H 'Content-Type: application/json' \
-  -d '{"message":"Bonjour Libre Claude","model":"claude-sonnet-5"}'
+  -d '{"message":"Bonjour Nodalibre","model":"mistral-small-latest"}'
 ```
 
 La réponse contient un `conversation_id`. Pour continuer le même fil :
 
 ```bash
 curl https://votre-domaine.com/chat.php \
-  -H 'Authorization: Bearer lc_sk_votre_clé' \
+  -H 'Authorization: Bearer nd_sk_votre_clé' \
   -H 'Content-Type: application/json' \
-  -d '{"conversation_id":1,"message":"Continue","model":"claude-sonnet-5"}'
+  -d '{"conversation_id":1,"message":"Continue","model":"mistral-small-latest"}'
 ```
 
-Le serveur vérifie la clé `lc_sk_...`, retrouve l'utilisateur associé, crée ou charge sa conversation, puis appelle l'API avec le pool de clés serveur ou la clé personnelle de l'utilisateur.
+Le serveur vérifie la clé `nd_sk_...`, retrouve l'utilisateur associé, crée ou charge sa conversation, puis appelle l'API avec le pool de clés serveur ou la clé personnelle de l'utilisateur. Les jetons historiques restent acceptés pour éviter une coupure lors de la migration.
 
 ## Compatibilité Hostinger
 
@@ -616,16 +619,18 @@ Le serveur vérifie la clé `lc_sk_...`, retrouve l'utilisateur associé, crée 
 - Protection contre les tentatives de connexion répétée.
 - Sessions persistantes en base.
 - Clé API personnelle stockée par utilisateur.
-- Logs applicatifs séparés dans `data/libre_claude.log`.
+- Logs applicatifs séparés dans `data/nodalibre.log`.
 
-## Migration depuis l'ancien nom
+## Migration du nom
 
-Si vous aviez déjà une base créée sous l'ancien nom, renommez-la avant le lancement :
+Au premier lancement, Nodalibre détecte et renomme automatiquement l'ancienne
+base SQLite et son journal. Sauvegardez néanmoins le dossier `data/` avant la
+mise à jour. Les anciens jetons API internes continuent de fonctionner ; les
+nouveaux jetons utilisent le préfixe `nd_sk_`.
 
-```bash
-mv data/voanh.sqlite data/libre_claude.sqlite
-mv data/voanh.log data/libre_claude.log
-```
+Les identifiants Docker ont changé pour `nodalibre`, `nodalibre_data` et
+`nodalibre_sandbox`. Si vous utilisiez des volumes nommés, rattachez explicitement
+les volumes existants ou copiez leur contenu avant de recréer le conteneur.
 
 ## Remerciements
 
@@ -633,6 +638,6 @@ Merci à [LaurentVoanh](https://github.com/LaurentVoanh) pour ce projet génial.
 
 ## Licence
 
-Libre Claude est distribué sous licence **MIT**.
+Nodalibre est distribué sous licence **MIT**.
 
 Vous pouvez l'utiliser, le modifier, le redistribuer et l'auto-héberger librement, à condition de conserver la notice de licence. Voir le fichier [LICENSE](LICENSE).

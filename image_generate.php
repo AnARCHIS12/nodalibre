@@ -1,12 +1,12 @@
 <?php
 /**
- * Libre Claude - Génération d images Mistral
+ * Nodalibre - Génération d images Mistral
  * Sauvegarde les images sur disque pour les afficher dans l historique
  */
 require_once dirname(__FILE__) . '/config.php';
 require_once dirname(__FILE__) . '/database.php';
 require_once dirname(__FILE__) . '/auth.php';
-require_once dirname(__FILE__) . '/claude.php';
+require_once dirname(__FILE__) . '/mistral.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
@@ -60,8 +60,8 @@ function saveGeneratedImage(string $base64, string $mime = 'image/png'): ?string
 }
 
 try {
-    $claude = getClaudeClient($apiKey);
-    $result = $claude->generateImage($prompt);
+    $mistral = getMistralClient($apiKey);
+    $result = $mistral->generateImage($prompt);
 
     if (!empty($result['success'])) {
         $convId = isset($input['conversation_id']) ? (int)$input['conversation_id'] : null;
@@ -119,6 +119,6 @@ try {
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 } catch (Exception $e) {
-    libreclaude_log("Image generation exception: " . $e->getMessage(), 1);
+    nodalibre_log("Image generation exception: " . $e->getMessage(), 1);
     echo json_encode(['success' => false, 'error' => 'Erreur interne de génération d image']);
 }

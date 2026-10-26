@@ -1,11 +1,11 @@
 <?php
 /**
- * Libre Claude - Client API Claude (cURL only, Hostinger compatible)
+ * Nodalibre - Client API Mistral (cURL only, Hostinger compatible)
  */
 
 require_once dirname(__FILE__) . '/config.php';
 
-class ClaudeClient {
+class MistralClient {
     private $apiKeys;
     private $currentKeyIndex = 0;
 
@@ -35,14 +35,14 @@ class ClaudeClient {
                     }
                 }
             } catch (Exception $e) {
-                libreclaude_log("Config keys fallback: " . $e->getMessage(), 2);
+                nodalibre_log("Config keys fallback: " . $e->getMessage(), 2);
             }
         }
 
         return DEFAULT_MISTRAL_API_KEYS;
     }
 
-    public function chat($messages, $model = 'codestral-latest', $options = []) {
+    public function chat($messages, $model = MASTER_AGENT_MODEL, $options = []) {
         $params = array_merge([
             'temperature' => 0.7,
             'max_tokens'  => 4096,
@@ -75,7 +75,7 @@ class ClaudeClient {
             } catch (Exception $e) {
                 $msg = $e->getMessage();
                 $lastError = $msg;
-                libreclaude_log("API key[$this->currentKeyIndex] error: $msg", 2);
+                nodalibre_log("API key[$this->currentKeyIndex] error: $msg", 2);
 
                 // Rotation si rate limit ou clé invalide
                 if (strpos($msg, '429') !== false || strpos($msg, '401') !== false || strpos($msg, '402') !== false) {
@@ -85,14 +85,14 @@ class ClaudeClient {
         }
 
         if ($lastError && stripos($lastError, 'subscription tier') !== false) {
-            return ['success' => false, 'error' => "Ce modèle requiert un abonnement Mistral payant (carte bancaire). Pour utiliser votre clé gratuite, sélectionnez Claude Code Max ou Claude Local Sonnet."];
+            return ['success' => false, 'error' => "Ce modèle requiert un niveau d'abonnement Mistral supérieur. Sélectionnez un modèle disponible pour votre compte."];
         }
         if ($lastError && (stripos($lastError, 'Rate limit') !== false || stripos($lastError, '429') !== false)) {
-            return ['success' => false, 'error' => "Limite de requêtes atteinte sur ce modèle. Pour utiliser votre clé gratuite, sélectionnez Claude Code Max ou Claude Local Sonnet."];
+            return ['success' => false, 'error' => "Limite de requêtes atteinte sur ce modèle. Réessayez plus tard ou sélectionnez un autre modèle Mistral."];
         }
 
         $errorDetail = $lastError ? " ($lastError)" : '';
-        return ['success' => false, 'error' => "Toutes les clés API ont échoué$errorDetail. Vérifiez vos clés Claude."];
+        return ['success' => false, 'error' => "Toutes les clés API ont échoué$errorDetail. Vérifiez vos clés Mistral."];
     }
 
     public function transcribe($filePath, $fileName, $mimeType = 'audio/webm', $language = 'fr') {
@@ -108,14 +108,14 @@ class ClaudeClient {
                         'success'  => true,
                         'text'     => trim($result['text']),
                         'language' => $result['language'] ?? null,
-                        'model'    => $result['model'] ?? 'voxtral-mini-latest',
+                        'model'    => $result['model'] ?? MISTRAL_TRANSCRIPTION_MODEL,
                         'usage'    => $result['usage'] ?? [],
                     ];
                 }
                 throw new Exception('Transcription invalide');
             } catch (Exception $e) {
                 $msg = $e->getMessage();
-                libreclaude_log("Transcription key[$this->currentKeyIndex] error: $msg", 2);
+                nodalibre_log("Transcription key[$this->currentKeyIndex] error: $msg", 2);
 
                 if (strpos($msg, '429') !== false || strpos($msg, '401') !== false || strpos($msg, '402') !== false) {
                     $this->currentKeyIndex = ($this->currentKeyIndex + 1) % count($this->apiKeys);
@@ -123,11 +123,11 @@ class ClaudeClient {
             }
         }
 
-        return ['success' => false, 'error' => 'La dictée vocale a échoué. Vérifiez vos clés Claude.'];
+        return ['success' => false, 'error' => 'La dictée vocale a échoué. Vérifiez vos clés Mistral.'];
     }
 
     public function chatWithWebSearch($messages, $model = 'mistral-small-latest', $options = []) {
-        if (!in_array($model, ['mistral-small-latest', 'mistral-medium-latest', 'mistral-large-latest', 'mistral-small-2603', 'mistral-medium-2604'])) {
+        if (!in_array($model, ['mistral-small-latest', 'mistral-medium-latest', 'mistral-large-latest', 'mistral-large-4', 'mistral-small-2603', 'mistral-medium-3-5'])) {
             $model = 'mistral-small-latest';
         }
 
@@ -152,7 +152,7 @@ class ClaudeClient {
                 throw new Exception('Réponse web invalide');
             } catch (Exception $e) {
                 $lastError = $e->getMessage();
-                libreclaude_log("Web search key[$this->currentKeyIndex] error: $lastError", 2);
+                nodalibre_log("Web search key[$this->currentKeyIndex] error: $lastError", 2);
 
                 if (strpos($lastError, '429') !== false || strpos($lastError, '401') !== false || strpos($lastError, '402') !== false) {
                     $this->currentKeyIndex = ($this->currentKeyIndex + 1) % count($this->apiKeys);
@@ -189,7 +189,7 @@ class ClaudeClient {
             } catch (Exception $e) {
                 $msg = $e->getMessage();
                 $lastError = $msg;
-                libreclaude_log("Speech key[$this->currentKeyIndex] error: $msg", 2);
+                nodalibre_log("Speech key[$this->currentKeyIndex] error: $msg", 2);
 
                 if (strpos($msg, '429') !== false || strpos($msg, '401') !== false || strpos($msg, '402') !== false) {
                     $this->currentKeyIndex = ($this->currentKeyIndex + 1) % count($this->apiKeys);
@@ -337,12 +337,12 @@ class ClaudeClient {
                     $text = trim(file_get_contents($tmpOut));
                     @unlink($tmpOut);
                     if ($text !== '') {
-                        libreclaude_log("pdftotext success: " . strlen($text) . " chars", 1);
+                        nodalibre_log("pdftotext success: " . strlen($text) . " chars", 1);
                         return ['success' => true, 'text' => $text, 'model' => 'pdftotext (extraction locale)', 'raw' => []];
                     }
                 }
                 @unlink($tmpOut);
-                libreclaude_log("pdftotext vide, PDF probablement scanné → Mistral OCR", 1);
+                nodalibre_log("pdftotext vide, PDF probablement scanné → Mistral OCR", 1);
             }
         }
 
@@ -365,7 +365,7 @@ class ClaudeClient {
                 ];
             } catch (Exception $e) {
                 $lastError = $e->getMessage();
-                libreclaude_log("OCR key[$this->currentKeyIndex] error: $lastError", 2);
+                nodalibre_log("OCR key[$this->currentKeyIndex] error: $lastError", 2);
                 if (strpos($lastError, '429') !== false || strpos($lastError, '401') !== false || strpos($lastError, '402') !== false) {
                     $this->currentKeyIndex = ($this->currentKeyIndex + 1) % count($this->apiKeys);
                 }
@@ -401,7 +401,7 @@ class ClaudeClient {
                     }
                 }
             } catch (Exception $ve) {
-                libreclaude_log("Vision OCR fallback error: " . $ve->getMessage(), 2);
+                nodalibre_log("Vision OCR fallback error: " . $ve->getMessage(), 2);
             }
         }
 
@@ -452,7 +452,7 @@ class ClaudeClient {
                 ];
             } catch (Exception $e) {
                 $lastError = $e->getMessage();
-                libreclaude_log("Image generation key[$this->currentKeyIndex] error: $lastError", 2);
+                nodalibre_log("Image generation key[$this->currentKeyIndex] error: $lastError", 2);
 
                 if (strpos($lastError, '429') !== false || strpos($lastError, '401') !== false || strpos($lastError, '402') !== false) {
                     $this->currentKeyIndex = ($this->currentKeyIndex + 1) % count($this->apiKeys);
@@ -510,7 +510,7 @@ class ClaudeClient {
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT        => 60,
             CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_USERAGENT      => 'Libre Claude/1.0 (PHP cURL)',
+            CURLOPT_USERAGENT      => 'Nodalibre/1.0 (PHP cURL)',
             CURLOPT_HTTPHEADER     => [
                 'Authorization: Bearer ' . $apiKey,
                 'Content-Type: application/json',
@@ -537,7 +537,7 @@ class ClaudeClient {
 
     private function doTranscriptionRequest($apiKey, $filePath, $fileName, $mimeType, $language) {
         $postFields = [
-            'model' => 'voxtral-mini-latest',
+            'model' => MISTRAL_TRANSCRIPTION_MODEL,
             'file' => new CURLFile($filePath, $mimeType, $fileName),
         ];
         if ($language) {
@@ -551,7 +551,7 @@ class ClaudeClient {
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT        => 90,
             CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_USERAGENT      => 'Libre Claude/1.0 (PHP cURL)',
+            CURLOPT_USERAGENT      => 'Nodalibre/1.0 (PHP cURL)',
             CURLOPT_HTTPHEADER     => [
                 'Authorization: Bearer ' . $apiKey,
                 'Accept: application/json',
@@ -594,7 +594,7 @@ class ClaudeClient {
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT        => 90,
             CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_USERAGENT      => 'Libre Claude/1.0 (PHP cURL)',
+            CURLOPT_USERAGENT      => 'Nodalibre/1.0 (PHP cURL)',
             CURLOPT_HTTPHEADER     => [
                 'Authorization: Bearer ' . $apiKey,
                 'Content-Type: application/json',
@@ -716,7 +716,7 @@ class ClaudeClient {
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT        => 90,
             CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_USERAGENT      => 'Libre Claude/1.0 (PHP cURL)',
+            CURLOPT_USERAGENT      => 'Nodalibre/1.0 (PHP cURL)',
             CURLOPT_HTTPHEADER     => [
                 'Authorization: Bearer ' . $apiKey,
                 'Content-Type: application/json',
@@ -790,8 +790,8 @@ class ClaudeClient {
     private function createImageAgent($apiKey) {
         $payload = [
             'model' => MISTRAL_IMAGE_MODEL,
-            'name' => 'Libre Claude Image',
-            'description' => 'Agent Libre Claude pour générer des images.',
+            'name' => 'Nodalibre Image',
+            'description' => 'Agent Nodalibre pour générer des images.',
             'instructions' => 'Génère des images à la demande avec l outil image_generation. Réponds brièvement en français.',
             'tools' => [['type' => 'image_generation']],
             'completion_args' => [
@@ -825,7 +825,7 @@ class ClaudeClient {
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT        => $timeout,
             CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_USERAGENT      => 'Libre Claude/1.0 (PHP cURL)',
+            CURLOPT_USERAGENT      => 'Nodalibre/1.0 (PHP cURL)',
             CURLOPT_HTTPHEADER     => [
                 'Authorization: Bearer ' . $apiKey,
                 'Content-Type: application/json',
@@ -858,7 +858,7 @@ class ClaudeClient {
             CURLOPT_TIMEOUT        => 120,
             CURLOPT_SSL_VERIFYPEER => true,
             CURLOPT_HEADER         => true,
-            CURLOPT_USERAGENT      => 'Libre Claude/1.0 (PHP cURL)',
+            CURLOPT_USERAGENT      => 'Nodalibre/1.0 (PHP cURL)',
             CURLOPT_HTTPHEADER     => [
                 'Authorization: Bearer ' . $apiKey,
             ],
@@ -985,10 +985,6 @@ class ClaudeClient {
     }
 }
 
-function getClaudeClient($userApiKey = null) {
-    return new ClaudeClient($userApiKey);
-}
-
 function getMistralClient($userApiKey = null) {
-    return getClaudeClient($userApiKey);
+    return new MistralClient($userApiKey);
 }

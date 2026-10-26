@@ -1,11 +1,11 @@
 <?php
 /**
- * Libre Claude - Réponse vocale Voxtral TTS
+ * Nodalibre - Réponse vocale Voxtral TTS
  */
 require_once dirname(__FILE__) . '/config.php';
 require_once dirname(__FILE__) . '/database.php';
 require_once dirname(__FILE__) . '/auth.php';
-require_once dirname(__FILE__) . '/claude.php';
+require_once dirname(__FILE__) . '/mistral.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
@@ -68,8 +68,8 @@ if ($refAudio !== '') {
 $apiKey = $user['mistral_api_key'] ?: null;
 
 try {
-    $claude = getClaudeClient($apiKey);
-    $result = $claude->speech($text, $voiceId, $format, $refAudio);
+    $mistral = getMistralClient($apiKey);
+    $result = $mistral->speech($text, $voiceId, $format, $refAudio);
 
     if ($result['success']) {
         echo json_encode([
@@ -86,6 +86,6 @@ try {
         ]);
     }
 } catch (Exception $e) {
-    libreclaude_log("Speech exception: " . $e->getMessage(), 1);
+    nodalibre_log("Speech exception: " . $e->getMessage(), 1);
     echo json_encode(['success' => false, 'error' => 'Erreur interne de synthèse vocale']);
 }
