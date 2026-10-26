@@ -1,18 +1,33 @@
 param(
-    [string]$Dir = $(if ($env:NODALIBRE_DIR) { $env:NODALIBRE_DIR } else { Join-Path $HOME "nodalibre" }),
-    [int]$Port = $(if ($env:NODALIBRE_PORT) { [int]$env:NODALIBRE_PORT } else { 8173 }),
-    [string]$Image = $(if ($env:NODALIBRE_IMAGE) { $env:NODALIBRE_IMAGE } else { "liberchat/libre-claude:latest" }),
+    [string]$Dir = $(if ($env:NODALIBRE_DIR) { $env:NODALIBRE_DIR } elseif ($env:LIBRE_CLAUDE_DIR) { $env:LIBRE_CLAUDE_DIR } else { "" }),
+    [int]$Port = $(if ($env:NODALIBRE_PORT) { [int]$env:NODALIBRE_PORT } elseif ($env:LIBRE_CLAUDE_PORT) { [int]$env:LIBRE_CLAUDE_PORT } else { 8173 }),
+    [string]$Image = $(if ($env:NODALIBRE_IMAGE) { $env:NODALIBRE_IMAGE } elseif ($env:LIBRE_CLAUDE_IMAGE) { $env:LIBRE_CLAUDE_IMAGE } else { "liberchat/libre-claude:latest" }),
     [string]$PublicUrl = $(if ($env:PUBLIC_URL) { $env:PUBLIC_URL } else { "" }),
     [string]$GitHubOAuthClientId = $(if ($env:GITHUB_OAUTH_CLIENT_ID) { $env:GITHUB_OAUTH_CLIENT_ID } else { "" }),
     [string]$GitHubOAuthClientSecret = $(if ($env:GITHUB_OAUTH_CLIENT_SECRET) { $env:GITHUB_OAUTH_CLIENT_SECRET } else { "" }),
     [string]$GitHubOAuthScope = $(if ($env:GITHUB_OAUTH_SCOPE) { $env:GITHUB_OAUTH_SCOPE } else { "" }),
-    [switch]$Yes,
-    [switch]$NoStart,
-    [switch]$NoInstallDocker,
+    [switch]$Yes = ($env:NODALIBRE_YES -eq "1" -or (-not $env:NODALIBRE_YES -and $env:LIBRE_CLAUDE_YES -eq "1")),
+    [switch]$NoStart = ($env:NODALIBRE_NO_START -eq "1" -or (-not $env:NODALIBRE_NO_START -and $env:LIBRE_CLAUDE_NO_START -eq "1")),
+    [switch]$NoInstallDocker = ($env:NODALIBRE_INSTALL_DOCKER -eq "0" -or (-not $env:NODALIBRE_INSTALL_DOCKER -and $env:LIBRE_CLAUDE_INSTALL_DOCKER -eq "0")),
     [switch]$DryRun
 )
 
 $ErrorActionPreference = "Stop"
+
+function Find-ComposeFile($InstallDir) {
+    foreach ($name in @("compose.yaml", "compose.yml", "docker-compose.yaml", "docker-compose.yml")) {
+        $path = Join-Path $InstallDir $name
+        if (Test-Path -LiteralPath $path -PathType Leaf) { return $path }
+    }
+}
+
+if (-not $Dir) {
+    $Dir = Join-Path $HOME "nodalibre"
+    $legacyDir = Join-Path $HOME "libre-claude"
+    if (-not (Find-ComposeFile $Dir) -and (Find-ComposeFile $legacyDir)) {
+        $Dir = $legacyDir
+    }
+}
 
 function Format-DisplayPath($Path) {
     if (-not $Path) { return "" }
@@ -398,6 +413,7 @@ function Start-Install {
     if (-not $Yes) {
         Write-Warn "Assistant interactif. Appuyez sur Entree pour garder une valeur par defaut."
         $Dir = Ask-Value "Dossier d'installation" $Dir
+        if (-not (Find-ComposeFile (Resolve-InputPath $Dir))) {
         $Port = [int](Ask-Value "Port web local" $Port)
         $Image = Ask-Value "Image Docker" $Image
         $PublicUrl = Ask-Value "URL publique de l'app" $PublicUrl
@@ -406,18 +422,29 @@ function Start-Install {
             $GitHubOAuthClientId = Ask-Value "GitHub OAuth Client ID" $GitHubOAuthClientId
             $GitHubOAuthClientSecret = Ask-SecretValue "GitHub OAuth Client Secret" $GitHubOAuthClientSecret
         }
+        }
 
-        $NoStart = -not (Ask-YesNo "Lancer Nodalibre apres l'installation ?" $true)
+        if (-not $NoStart) {
+            $NoStart = -not (Ask-YesNo "Lancer Nodalibre apres l'installation ?" $true)
+        }
     } else {
         Write-Warn "Mode non-interactif: utilisation des parametres et variables d'environnement."
     }
 
     if ($Port -lt 1 -or $Port -gt 65535) { Fail "port invalide: $Port" }
+    $Dir = [IO.Path]::GetFullPath((Resolve-InputPath $Dir))
+    $composeFile = Find-ComposeFile $Dir
+    $existingInstallation = [bool]$composeFile
 
     $oauthState = if ($GitHubOAuthClientId -and $GitHubOAuthClientSecret) { "active" } else { "desactive" }
     $startState = if ($NoStart) { "non" } else { "oui" }
 
     Write-Host ""
+    if ($composeFile) {
+        Write-Warn "Installation existante : Compose, .env, ports, image et volumes conserves."
+        Write-Info "Les parametres de configuration ne remplacent pas cette installation."
+        Write-Host "  Compose : $(Format-DisplayPath $composeFile)"
+    } else {
     Write-Host "Configuration:"
     Write-Host "  Dossier : $(Format-DisplayPath $Dir)"
     Write-Host "  Port    : $Port"
@@ -425,6 +452,7 @@ function Start-Install {
     Write-Host "  URL     : $(if ($PublicUrl) { $PublicUrl } else { "auto" })"
     Write-Host "  OAuth   : $oauthState"
     Write-Host "  Lancer  : $startState"
+    }
 
     if ($DryRun) {
         Write-Ok "Dry-run termine. Aucun fichier ecrit."
@@ -440,27 +468,21 @@ function Start-Install {
         Fail "$Dir existe mais n'est pas un dossier."
     }
 
-    $writeFiles = $true
-    if ((Test-Path (Join-Path $Dir "docker-compose.yml")) -and -not $Yes) {
-        Write-Warn "Installation existante detectee dans $(Format-DisplayPath $Dir)."
-        if (-not (Ask-YesNo "Mettre a jour les fichiers de configuration (.env, docker-compose.yml) ?" $true)) {
-            Write-Info "Conservation des fichiers existants. Poursuite du demarrage..."
-            $writeFiles = $false
-        }
-    }
-
-    if ($writeFiles) {
+    if (-not $composeFile) {
+        $composeFile = Join-Path $Dir "docker-compose.yml"
         New-Item -ItemType Directory -Force -Path $Dir | Out-Null
         New-Item -ItemType Directory -Force -Path (Join-Path $Dir "data") | Out-Null
         New-Item -ItemType Directory -Force -Path (Join-Path $Dir "sandbox") | Out-Null
 
+        if (-not (Test-Path -LiteralPath (Join-Path $Dir ".env"))) {
         @"
 PUBLIC_URL=$PublicUrl
 GITHUB_OAUTH_CLIENT_ID=$GitHubOAuthClientId
 GITHUB_OAUTH_CLIENT_SECRET=$GitHubOAuthClientSecret
 GITHUB_OAUTH_SCOPE=$GitHubOAuthScope
-MISTRAL_API_KEYS=
+MISTRAL_API_KEYS=$env:MISTRAL_API_KEYS
 "@ | Set-Content -Encoding UTF8 -Path (Join-Path $Dir ".env")
+        }
 
         @"
 services:
@@ -494,6 +516,7 @@ services:
         Write-Host ""
         Write-Host "Pour demarrer:"
         Write-Host "  cd `"$(Format-DisplayPath $Dir)`""
+        Write-Host "  docker compose pull"
         Write-Host "  docker compose up -d"
         return
     }
@@ -535,8 +558,12 @@ services:
     Write-Host ""
     Write-Ok "Nodalibre est installe et demarre !"
     Write-Host ""
-    Write-Host "Ouvrir dans votre navigateur:" -ForegroundColor Cyan
-    Write-Host "  http://127.0.0.1:$Port" -ForegroundColor Green
+    if ($existingInstallation) {
+        Write-Host "Ouvrez l'adresse configuree dans votre fichier Compose." -ForegroundColor Cyan
+    } else {
+        Write-Host "Ouvrir dans votre navigateur:" -ForegroundColor Cyan
+        Write-Host "  http://127.0.0.1:$Port" -ForegroundColor Green
+    }
     Write-Host ""
     Write-Host "Commandes utiles:"
     Write-Host "  cd `"$(Format-DisplayPath $Dir)`""
@@ -545,9 +572,11 @@ services:
     Write-Host "  docker compose pull; docker compose up -d"
     Write-Host "  docker compose down"
 
-    try {
-        Start-Process "http://127.0.0.1:$Port"
-    } catch {}
+    if (-not $existingInstallation) {
+        try {
+            Start-Process "http://127.0.0.1:$Port"
+        } catch {}
+    }
 }
 
 try {
@@ -558,4 +587,5 @@ try {
     }
     Write-Host ""
     Write-Host "L'installation a ete interrompue." -ForegroundColor Yellow
+    throw
 }

@@ -2,20 +2,33 @@
 set -eu
 
 APP_NAME="Nodalibre"
+find_compose() {
+  for name in compose.yaml compose.yml docker-compose.yaml docker-compose.yml; do
+    if [ -f "$1/$name" ]; then
+      printf '%s\n' "$1/$name"
+      return 0
+    fi
+  done
+}
+
 DEFAULT_DIR="${HOME:-.}/nodalibre"
+if [ -z "$(find_compose "$DEFAULT_DIR")" ] && [ -n "$(find_compose "${HOME:-.}/libre-claude")" ]; then
+  DEFAULT_DIR="${HOME:-.}/libre-claude"
+fi
+# Le tag historique reçoit aussi Nodalibre pendant la transition.
 DEFAULT_IMAGE="liberchat/libre-claude:latest"
 DEFAULT_PORT="8173"
 
-INSTALL_DIR="${NODALIBRE_DIR:-$DEFAULT_DIR}"
-IMAGE="${NODALIBRE_IMAGE:-$DEFAULT_IMAGE}"
-PORT="${NODALIBRE_PORT:-$DEFAULT_PORT}"
+INSTALL_DIR="${NODALIBRE_DIR:-${LIBRE_CLAUDE_DIR:-$DEFAULT_DIR}}"
+IMAGE="${NODALIBRE_IMAGE:-${LIBRE_CLAUDE_IMAGE:-$DEFAULT_IMAGE}}"
+PORT="${NODALIBRE_PORT:-${LIBRE_CLAUDE_PORT:-$DEFAULT_PORT}}"
 PUBLIC_URL_VALUE="${PUBLIC_URL:-}"
 CLIENT_ID="${GITHUB_OAUTH_CLIENT_ID:-}"
 CLIENT_SECRET="${GITHUB_OAUTH_CLIENT_SECRET:-}"
 CLIENT_SCOPE="${GITHUB_OAUTH_SCOPE:-}"
-YES="${NODALIBRE_YES:-0}"
-NO_START="${NODALIBRE_NO_START:-0}"
-INSTALL_DOCKER="${NODALIBRE_INSTALL_DOCKER:-1}"
+YES="${NODALIBRE_YES:-${LIBRE_CLAUDE_YES:-0}}"
+NO_START="${NODALIBRE_NO_START:-${LIBRE_CLAUDE_NO_START:-0}}"
+INSTALL_DOCKER="${NODALIBRE_INSTALL_DOCKER:-${LIBRE_CLAUDE_INSTALL_DOCKER:-1}}"
 DRY_RUN=0
 
 if [ -t 1 ]; then
@@ -63,6 +76,10 @@ Variables d'environnement:
   NODALIBRE_YES=1
   NODALIBRE_NO_START=1
   NODALIBRE_INSTALL_DOCKER=1
+
+Les anciennes variables LIBRE_CLAUDE_* restent acceptées.
+Une installation existante conserve son Compose, son .env et ses volumes.
+Les options de configuration concernent les nouvelles installations.
 
 Exemples:
   curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | sh
@@ -275,6 +292,7 @@ bold "$APP_NAME - installation"
 if has_tty; then
   yellow "Assistant interactif. Appuyez sur Entrée pour garder une valeur par défaut."
   INSTALL_DIR="$(ask_value "Dossier d'installation" "$INSTALL_DIR")"
+  if [ -z "$(find_compose "$INSTALL_DIR")" ]; then
   PORT="$(ask_value "Port web local" "$PORT")"
   IMAGE="$(ask_value "Image Docker" "$IMAGE")"
   PUBLIC_URL_VALUE="$(ask_value "URL publique de l'app" "$PUBLIC_URL_VALUE")"
@@ -282,17 +300,30 @@ if has_tty; then
     CLIENT_ID="$(ask_value "GitHub OAuth Client ID" "$CLIENT_ID")"
     CLIENT_SECRET="$(ask_secret "GitHub OAuth Client Secret" "$CLIENT_SECRET")"
   fi
-  if ask_yes_no "Lancer Nodalibre après l'installation ?" "yes"; then
-    NO_START=0
-  else
-    NO_START=1
+  fi
+  if [ "$NO_START" != "1" ]; then
+    if ask_yes_no "Lancer Nodalibre après l'installation ?" "yes"; then
+      NO_START=0
+    else
+      NO_START=1
+    fi
   fi
 else
   yellow "Mode non-interactif: utilisation des variables d'environnement et valeurs par défaut."
 fi
 
 validate_port "$PORT"
+case "$INSTALL_DIR" in
+  /*) ;;
+  *) INSTALL_DIR="$PWD/$INSTALL_DIR" ;;
+esac
+INSTALL_COMPOSE_FILE="$(find_compose "$INSTALL_DIR")"
 
+if [ -n "$INSTALL_COMPOSE_FILE" ]; then
+  yellow "Installation existante détectée dans $INSTALL_DIR."
+  yellow "Compose, .env, ports, image et volumes conservés ; les options de configuration ne les remplacent pas."
+  printf '  Compose : %s\n' "$INSTALL_COMPOSE_FILE"
+else
 cat <<EOF
 
 Configuration:
@@ -303,6 +334,7 @@ Configuration:
   OAuth   : $(if [ -n "$CLIENT_ID" ] && [ -n "$CLIENT_SECRET" ]; then printf 'activé'; else printf 'désactivé'; fi)
   Lancer  : $(if [ "$NO_START" = "1" ]; then printf 'non'; else printf 'oui'; fi)
 EOF
+fi
 
 if [ "$DRY_RUN" = "1" ]; then
   green "Dry-run terminé. Aucun fichier écrit."
@@ -318,23 +350,19 @@ if [ -e "$INSTALL_DIR" ] && [ ! -d "$INSTALL_DIR" ]; then
   die "$INSTALL_DIR existe mais n'est pas un dossier"
 fi
 
-if [ -d "$INSTALL_DIR" ] && [ -f "$INSTALL_DIR/docker-compose.yml" ]; then
-  yellow "Installation existante détectée dans $INSTALL_DIR."
-  if ! ask_yes_no "Mettre à jour les fichiers de lancement ?" "yes"; then
-    yellow "Aucun changement effectué."
-    exit 0
-  fi
-fi
-
+if [ -z "$INSTALL_COMPOSE_FILE" ]; then
+INSTALL_COMPOSE_FILE="$INSTALL_DIR/docker-compose.yml"
 mkdir -p "$INSTALL_DIR/data" "$INSTALL_DIR/sandbox"
 
+if [ ! -e "$INSTALL_DIR/.env" ]; then
 cat > "$INSTALL_DIR/.env" <<EOF
 PUBLIC_URL=$PUBLIC_URL_VALUE
 GITHUB_OAUTH_CLIENT_ID=$CLIENT_ID
 GITHUB_OAUTH_CLIENT_SECRET=$CLIENT_SECRET
 GITHUB_OAUTH_SCOPE=$CLIENT_SCOPE
-MISTRAL_API_KEYS=
+MISTRAL_API_KEYS=${MISTRAL_API_KEYS:-}
 EOF
+fi
 
 cat > "$INSTALL_DIR/docker-compose.yml" <<EOF
 services:
@@ -357,6 +385,7 @@ EOF
 
 green "Fichiers créés:"
 printf '  %s\n' "$INSTALL_DIR/docker-compose.yml" "$INSTALL_DIR/.env" "$INSTALL_DIR/data" "$INSTALL_DIR/sandbox"
+fi
 
 if [ "$NO_START" = "1" ]; then
   cat <<EOF
@@ -365,6 +394,7 @@ Installation préparée sans lancement.
 
 Pour démarrer:
   cd "$INSTALL_DIR"
+  docker compose pull
   docker compose up -d
 EOF
   exit 0
@@ -399,8 +429,8 @@ cat <<EOF
 
 Nodalibre est installé.
 
-Ouvrir:
-  http://127.0.0.1:$PORT
+Ouvrir l'adresse configurée dans votre fichier Compose.
+Pour une installation neuve avec le port proposé : http://127.0.0.1:$PORT
 
 Commandes utiles:
   cd "$INSTALL_DIR"

@@ -1,6 +1,6 @@
 FROM php:8.3.36-apache
 
-ARG APP_VERSION=1.4.0
+ARG APP_VERSION=1.4.1
 LABEL org.opencontainers.image.title="Nodalibre" \
       org.opencontainers.image.version="$APP_VERSION" \
       org.opencontainers.image.description="Assistant IA libre et auto-hébergeable"

@@ -3,11 +3,11 @@
 </p>
 
 <p align="center">
-  <strong>Assistant IA libre, auto-hébergeable et conçu pour plusieurs fournisseurs.</strong>
+  <strong>Assistant IA libre et auto-hébergeable — projet abandonné, plus maintenu.</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/AnARCHIS12/Libre-claude/releases/tag/v1.4.0"><img alt="Release v1.4.0" src="https://img.shields.io/badge/Release-v1.4.0-e6122a?style=for-the-badge&logo=github&logoColor=white"></a>
+  <a href="https://github.com/AnARCHIS12/Libre-claude/releases/tag/v1.4.1"><img alt="Dernière version v1.4.1" src="https://img.shields.io/badge/Dernière_version-v1.4.1-e6122a?style=for-the-badge&logo=github&logoColor=white"></a>
   <img alt="PHP" src="https://img.shields.io/badge/PHP-8.3%2B-777BB4?style=for-the-badge&logo=php&logoColor=white">
   <img alt="SQLite" src="https://img.shields.io/badge/SQLite-local-003B57?style=for-the-badge&logo=sqlite&logoColor=white">
   <img alt="Mistral AI" src="https://img.shields.io/badge/Mistral AI-e6122a?style=for-the-badge">
@@ -21,13 +21,37 @@
   <em>Projet indépendant, non affilié, sponsorisé ou approuvé par un fournisseur de modèles d'IA.</em>
 </p>
 
-> [!IMPORTANT]
-> Le projet change de nom et d'identité visuelle à partir de cette version.
-> Les installations existantes sont migrées automatiquement ; consultez la
-> section « Migration du nom » avant de mettre à jour un déploiement Docker.
-> L'image Docker conserve provisoirement son nom historique
-> `liberchat/libre-claude` afin que les installations existantes reçoivent la
-> mise à jour sans changer leur fichier Compose.
+> [!WARNING]
+> **Ce projet est abandonné et n'est plus maintenu. La v1.4.1 est la dernière version du projet.**
+> Aucune nouvelle version, correction de bug ou mise à jour de sécurité n'est prévue.
+> **Il n'y aura pas de migration vers une nouvelle application ni de V2 livrée par l'équipe.**
+> Le code et la documentation restent disponibles sous licence MIT pour permettre
+> l'utilisation de cette dernière version ou une reprise indépendante.
+
+## Pourquoi le projet s'arrête
+
+Notre volonté était de proposer un assistant libre, utilisable gratuitement.
+Nous sommes opposés au fait de devoir payer un fournisseur pour utiliser
+l'application. Les restrictions de l'accès gratuit et la dépendance à des
+services payants ne correspondent plus à cet objectif ; nous arrêtons donc
+le développement et la maintenance du projet.
+
+**La dernière version conserve le fonctionnement avec Mistral.** Vous pouvez
+continuer à l'utiliser avec une clé API valide et un compte donnant accès aux
+modèles et aux fonctionnalités choisis. Si ce choix nécessite une offre
+payante, vous devez activer la facturation et payer directement Mistral selon
+sa tarification. Le projet ne fournit ni crédits API ni accès gratuit garanti.
+La licence libre de l'application ne rend pas les appels aux services externes gratuits.
+
+Pour être précis, **Mistral n'a pas fermé toute son API** : sa documentation
+mentionne un mode gratuit limité pour les tests et le prototypage, ainsi qu'un
+paiement à l'usage. Les modèles, outils et quotas accessibles dépendent de votre
+compte. Consultez les [limites d'usage officielles](https://help.mistral.ai/fr/articles/698531-pourquoi-est-ce-que-j-atteins-mes-limites-d-usage-api-et-comment-les-augmenter)
+et la [tarification API](https://mistral.ai/pricing/api/) avant d'activer la facturation.
+
+Les instructions ci-dessous sont conservées pour les personnes qui souhaitent
+utiliser ou reprendre le code en l'état. Aucun support ni adaptation aux futurs
+changements des fournisseurs n'est assuré.
 
 ---
 
@@ -37,10 +61,11 @@
 
 Le projet utilise PHP pur, SQLite, cURL et l'API Mistral. Il inclut une installation initiale, une authentification, un historique de conversations, une rotation des clés API et une interface responsive rouge/noir.
 
-La V1 PHP reste disponible pendant la transition. La réécriture Go et son
-architecture multi-fournisseur sont documentées dans
-[`apps/api-v2/`](apps/api-v2/) et
-[`docs/architecture/v2.md`](docs/architecture/v2.md).
+La dernière application PHP reste disponible en l'état. Le prototype Go dans
+[`apps/api-v2/`](apps/api-v2/) et l'ancien document d'architecture
+[`docs/architecture/v2.md`](docs/architecture/v2.md) sont conservés comme archives
+pour une éventuelle reprise indépendante. Ils ne constituent plus une feuille
+de route ni un engagement de livraison.
 
 ## Fonctionnalités
 
@@ -50,7 +75,8 @@ architecture multi-fournisseur sont documentées dans
 - Authentification avec mots de passe hashes.
 - Sessions stockées en base SQLite.
 - Conversations et messages persistants par utilisateur.
-- Catalogue Mistral actuel : Mistral Large 4, Medium 3.5, Small 4, Ministral 3 et Codestral.
+- Chat avec Mistral AI. L'accès aux modèles et les éventuels frais dépendent
+  de votre compte Mistral ; aucune gratuité n'est garantie pour son API hébergée.
 - Rotation automatique des clés API partagées.
 - Clé API personnelle configurable par utilisateur.
 - Pool de clés Mistral serveur administrable depuis l'interface.
@@ -144,10 +170,25 @@ Nodalibre peut aussi tourner dans une image Docker Apache + PHP.
 
 ### Installation one-line interactive
 
+Les installateurs assurent aussi la transition des installations existantes.
+Ils réutilisent `~/libre-claude` si une installation y est détectée et qu'il
+n'existe pas déjà d'installation dans `~/nodalibre`. Un dossier donné avec
+`--dir` / `-Dir` ou une variable d'environnement reste prioritaire.
+Les anciennes variables `LIBRE_CLAUDE_*` sont acceptées ; les variables
+`NODALIBRE_*` ont priorité, puis les options explicites les remplacent.
+
+Lors d'une mise à jour, le fichier Compose et le `.env` existants sont
+conservés, ainsi que les ports, noms de services et volumes. Les options de
+configuration concernent les nouvelles installations. Le script lance
+`pull` puis `up -d` dans le dossier existant, sauf avec `--no-start` /
+`-NoStart`. Le mode `--dry-run` / `-DryRun` n'écrit aucun fichier.
+L'image par défaut reste `liberchat/libre-claude:latest` pendant la transition ;
+elle recevra Nodalibre lorsque la publication Docker aura réussi.
+
 Installation moderne depuis GitHub avec `curl` :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | sh
 ```
 
 Le script lance un assistant interactif :
@@ -170,31 +211,31 @@ Si Docker est absent, l'installateur propose de l'installer automatiquement :
 Version avec URL GitHub classique :
 
 ```bash
-curl -fsSL https://github.com/AnARCHIS12/Libre-claude/raw/main/scripts/install.sh | sh
+curl -fsSL https://github.com/AnARCHIS12/Libre-claude/raw/main/install.sh | sh
 ```
 
 Afficher l'aide :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | sh -s -- --help
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | sh -s -- --help
 ```
 
 Changer le port sans passer par les questions :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | sh -s -- --port 8080
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | sh -s -- --port 8080
 ```
 
 Installer dans un dossier précis :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | sh -s -- --dir /opt/nodalibre
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | sh -s -- --dir /opt/nodalibre
 ```
 
 Installation automatique sans interaction :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | \
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | \
   NODALIBRE_YES=1 \
   NODALIBRE_PORT=8080 \
   sh
@@ -203,19 +244,19 @@ curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/script
 Préparer les fichiers sans démarrer Docker :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | sh -s -- --no-start
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | sh -s -- --no-start
 ```
 
 Refuser l'installation automatique de Docker :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | sh -s -- --no-install-docker
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | sh -s -- --no-install-docker
 ```
 
 Avec OAuth GitHub dès l'installation :
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.sh | \
+curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.sh | \
   NODALIBRE_YES=1 \
   GITHUB_OAUTH_CLIENT_ID=votre_client_id \
   GITHUB_OAUTH_CLIENT_SECRET=votre_client_secret \
@@ -228,7 +269,7 @@ curl -fsSL https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/script
 Depuis PowerShell, lancez l'installateur interactif Windows :
 
 ```powershell
-irm https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.ps1 | iex
+irm https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.ps1 | iex
 ```
 
 Le script demande :
@@ -247,7 +288,7 @@ Si Docker Desktop ou WSL sont absents, le script configure automatiquement WSL 2
 Avec options, téléchargez puis lancez le script :
 
 ```powershell
-irm https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/scripts/install.ps1 -OutFile install.ps1
+irm https://raw.githubusercontent.com/AnARCHIS12/Libre-claude/main/install.ps1 -OutFile install.ps1
 powershell -ExecutionPolicy Bypass -File .\install.ps1 -Port 8080 -Dir "$env:USERPROFILE\Nodalibre"
 ```
 
@@ -381,8 +422,8 @@ docker buildx imagetools inspect votre-compte/nodalibre:latest
 Versionner une release :
 
 ```bash
-docker tag votre-compte/nodalibre:latest votre-compte/nodalibre:v1.4.0
-docker push votre-compte/nodalibre:v1.4.0
+docker tag votre-compte/nodalibre:latest votre-compte/nodalibre:v1.4.1
+docker push votre-compte/nodalibre:v1.4.1
 ```
 
 ### Déploiement production avec l'image publiée
@@ -530,24 +571,26 @@ Après ça, le bouton `Se connecter avec GitHub` apparaît dans le Workspace. L'
 ```text
 Nodalibre/
 ├── apps/
-│   ├── web-legacy/                  Application PHP V1 maintenue
+│   ├── web-legacy/                  Dernière application PHP, non maintenue
 │   │   ├── assets/css/              Styles de l'interface
 │   │   ├── index.php                Interface principale
 │   │   ├── chat.php                 API de chat
 │   │   ├── mistral.php              Adaptateur Mistral historique
 │   │   └── ...
-│   └── api-v2/                      Nouveau cœur Go multi-fournisseur
+│   └── api-v2/                      Prototype Go abandonné, conservé pour reprise
 │       ├── go.mod
 │       └── internal/provider/       Contrats et adaptateurs IA
 ├── assets/branding/                 Logos et icônes Nodalibre
 ├── docs/
-│   ├── architecture/v2.md           Architecture cible de la V2
-│   └── releases/                    Notes des versions publiées
+│   ├── architecture/v2.md           Ancien projet de V2, archivé
+│   └── releases/                    Notes de version conservées
 ├── scripts/
 │   ├── install.sh                   Installateur Linux/macOS
 │   ├── install.ps1                  Installateur Windows
 │   └── docker-entrypoint.sh         Préparation du conteneur PHP
-├── Dockerfile                       Image de la V1 pendant la migration
+├── install.sh                       Relais compatible vers scripts/install.sh
+├── install.ps1                      Relais compatible vers scripts/install.ps1
+├── Dockerfile                       Image de la dernière application PHP
 ├── docker-compose.yml               Développement local
 ├── docker-compose.prod.yml          Déploiement avec l'image publiée
 ├── .env.example                     Variables d'environnement
@@ -555,9 +598,13 @@ Nodalibre/
 └── README.md
 ```
 
-La V1 PHP est isolée et reste fonctionnelle pendant la migration. Le nouveau
-code doit être ajouté dans `apps/api-v2/`; il ne doit pas recréer de fichiers
-PHP à la racine du dépôt.
+Les installateurs sont rangés dans `scripts/`. Les fichiers `install.sh` et
+`install.ps1` à la racine conservent les anciennes commandes d'installation :
+ils lancent le script local lorsqu'il est disponible, sinon ils téléchargent
+celui de `scripts/`. Les options sont transmises à l'installateur.
+
+Le code PHP est isolé dans `apps/web-legacy/`. Le prototype `apps/api-v2/`
+est inachevé et n'est pas destiné à remplacer automatiquement cette application.
 
 ## Base de données
 
@@ -601,7 +648,7 @@ curl https://votre-domaine.com/chat.php \
   -d '{"conversation_id":1,"message":"Continue","model":"mistral-small-latest"}'
 ```
 
-Le serveur vérifie la clé `nd_sk_...`, retrouve l'utilisateur associé, crée ou charge sa conversation, puis appelle l'API avec le pool de clés serveur ou la clé personnelle de l'utilisateur. Les jetons historiques restent acceptés pour éviter une coupure lors de la migration.
+Le serveur vérifie la clé `nd_sk_...`, retrouve l'utilisateur associé, crée ou charge sa conversation, puis appelle l'API avec le pool de clés serveur ou la clé personnelle de l'utilisateur. Les jetons historiques restent également acceptés.
 
 ## Compatibilité Hostinger
 
@@ -620,20 +667,25 @@ Le serveur vérifie la clé `nd_sk_...`, retrouve l'utilisateur associé, crée 
 - Clé API personnelle stockée par utilisateur.
 - Logs applicatifs séparés dans `data/nodalibre.log`.
 
-## Migration du nom
+## Conservation des installations et reprise du projet
 
-Au premier lancement, Nodalibre détecte et renomme automatiquement l'ancienne
-base SQLite et son journal. Sauvegardez néanmoins le dossier `data/` avant la
-mise à jour. Les anciens jetons API internes continuent de fonctionner ; les
-nouveaux jetons utilisent le préfixe `nd_sk_`.
+**Aucune migration ni transition vers une nouvelle application n'est prévue.**
+Les installations existantes peuvent être conservées en l'état. Sauvegardez
+votre base SQLite, vos fichiers et votre configuration. Conservez les volumes
+et le fichier Compose de votre instance : ne les remplacez pas par ceux d'une
+installation neuve sans vérifier les chemins des données.
 
-Le nom de l'image Docker ne change pas dans cette version de transition :
-conservez `liberchat/libre-claude`. Un ancien fichier Compose peut donc être mis
-à jour avec `docker compose pull && docker compose up -d` sans perdre ses
-volumes. Le nouveau fichier Compose utilise les noms `nodalibre_data` et
-`nodalibre_sandbox` pour les installations neuves ; ne remplacez pas le fichier
-Compose d'une instance existante sans rattacher explicitement ses anciens
-volumes.
+Les anciennes notes de version, le prototype Go et le document d'architecture
+V2 sont conservés à titre historique. Leurs annonces de migration ou de
+travaux futurs sont annulées par l'arrêt du projet annoncé dans ce README.
+Les fichiers de construction et de publication restent disponibles pour les
+personnes souhaitant reprendre le projet ; leur présence ne signifie pas
+qu'une nouvelle image Docker a été publiée ou que de futures mises à jour
+seront distribuées.
+
+Vous pouvez créer un fork, modifier le code et le redistribuer dans le respect
+de la [licence MIT](LICENSE). Toute reprise sera indépendante de l'équipe
+qui arrête ici le développement et la maintenance.
 
 ## Remerciements
 

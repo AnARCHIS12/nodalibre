@@ -1,3 +1,8 @@
+> [!WARNING]
+> Document historique : projet abandonné, plus maintenu. La v1.4.1 est la
+> dernière version. Les travaux et migrations décrits ci-dessous sont annulés ;
+> ce document est conservé uniquement pour une éventuelle reprise indépendante.
+
 # Nodalibre V2
 
 Ce répertoire contient la réécriture Go multi-provider. Il est volontairement
